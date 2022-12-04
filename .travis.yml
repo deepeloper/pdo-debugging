@@ -1,0 +1,17 @@
+language: php
+php: [ 5.4 ]
+sudo: false
+
+install:
+  - travis_retry composer install --no-interaction --prefer-dist --optimize-autoloader
+
+script:
+  - vendor/bin/phpcs --standard=PSR12
+  - vendor/bin/phpunit -c ./build/config/phpunit.xml
+
+after_success:
+  - cd build/output
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email: false
