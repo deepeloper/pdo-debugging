@@ -157,7 +157,7 @@ class Logger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function log($message)
+    public function log($message, array $scope)
     {
         echo "$message\n";
     }
@@ -190,7 +190,6 @@ $pdo = new PDOExcavated(
             ],
             'sources' => [
             ],
-            // } Defaults
         ],
     ]
 );
@@ -220,3 +219,130 @@ If you wish to log only queries, pass following 'sources' section:
             ],
 ```
 If source started with "/" it will be processed like regular expression, otherwise will be compared like string.
+
+### Customizing debugging
+You can customize log message scope and process result message before logging:
+```php
+use deepeloper\PDO\LoggerInterface;
+use deepeloper\PDO\PDOExcavated;
+use deepeloper\PDO\PDOStatementExcavated;
+
+class class PDOExcavatedExtended extends PDOExcavated
+{
+    /**
+     * Allows to customize log message scope.
+     *
+     * @param array &$scope
+     * @return void
+     * @see ExcavatingTrait::after()
+     */
+    protected function scope(array &$scope)
+    {
+        $scope['FOO'] = __METHOD__;
+    }
+
+    /**
+     * Prepares query for logging.
+     *
+     * @param string &$query
+     * @return void
+     * @see ExcavatingTrait::after()
+     */
+    protected function prepareQueryForLogging(&$query)
+    {
+        // Modify query here.
+    }
+
+    /**
+     * Method used to replace PDOStatementExcavated by possible child.
+     *
+     * @param string $template
+     * @param PDOStatementExcavated $stmt
+     * @return PDOStatementExcavatedExtended
+     * @see self::getResultStatement()
+     */
+    protected function getStatement($template, PDOStatement $stmt)
+    {
+        return new PDOStatementExcavatedExtended($template, $this, $stmt);
+    }
+}
+
+class PDOStatementExcavatedExtended extends PDOStatementExcavated
+{
+    /**
+     * Allows to customize log message scope.
+     *
+     * @param array &$scope
+     * @return void
+     * @see ExcavatingTrait::after()
+     */
+    protected function scope(array &$scope)
+    {
+        $scope['FOO'] = __METHOD__;
+    }
+
+    /**
+     * Prepares query for logging.
+     *
+     * @param string &$query
+     * @return void
+     * @see ExcavatingTrait::after()
+     */
+    protected function prepareQueryForLogging(&$query)
+    {
+        // Modify query here.
+    }
+}
+
+class Logger implements LoggerInterface
+{
+    /**
+     * Logs message.
+     *
+     * @param string $message
+     * @param array $scope
+     * @return void
+     */
+    public function log($message, array $scope)
+    {
+        echo "$message\n";
+    }
+}
+
+$dsn = "...";
+$username = "...";
+$password = "...";
+
+$logger = new Logger();
+$pdo = new PDOExcavatedExtended(
+    $dsn,
+    $username,
+    $password,
+    [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDOExcavated::ATTR_DEBUG => [
+            'logger' => $logger,
+            'format' => [
+                'call'  => "%FOO%",
+                'query' => "%FOO%",
+            ],
+        ],
+    ]
+);
+
+$pdo->exec("UPDATE `test` SET `bar` = ''");
+$pdo->query("SELECT 1");
+$stmt = $pdo->prepare("SELECT ?, ?");
+$stmt->bindValue(1, 100500, PDO::PARAM_INT);
+$stmt->bindValue(2, "blah");
+$stmt->execute();
+```
+will output:
+```
+deepeloper\PDO\PDOExcavatedExtended::scope
+deepeloper\PDO\PDOExcavatedExtended::scope
+deepeloper\PDO\PDOExcavatedExtended::scope
+deepeloper\PDO\PDOExcavatedExtended::scope
+deepeloper\PDO\PDOStatementExcavatedExtended::scope
+
+```

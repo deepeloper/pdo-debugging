@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+
+    <title>PDO Debugging &amp; Benchmarking Tools</title>
+
+    <parser>
+        <default-package-name>pdo-debugging</default-package-name>
+        <target>build/tmp/api-cache</target>
+    </parser>
+
+    <transformer>
+        <target>build/output/api</target>
+    </transformer>
+
+    <plugins>
+        <plugin path="Core" />
+    </plugins>
+
+    <transformations>
+        <template name="clean" />
+    </transformations>
+
+    <files>
+        <directory>./src</directory>
+    </files>
+
+</phpdocumentor>
