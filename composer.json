@@ -30,7 +30,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "deepeloper\\PDO\\": ["tests/src", "tests/php-versions/5.4"]
+            "deepeloper\\PDO\\": ["tests", "tests/src"]
         }
     },
     "scripts": {
