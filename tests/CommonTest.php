@@ -10,6 +10,7 @@
 namespace deepeloper\PDO;
 
 use PDO;
+use PDOException;
 use stdClass;
 
 /**
@@ -256,12 +257,11 @@ class CommonTest extends TestCaseConfigAndDatabase
      *
      * @return void
      * @cover PDOExcavated::getResultStatement
-     * @todo PHP >=5.5: Replace "PDOException" with PDOException::class.
      */
     public function testExceptionOnWrongQuery()
     {
         $pdo = $this->connectDatabase();
-        $this->setExpectedException("PDOException");
+        $this->setExpectedException(PDOException::class);
         $stmt = $pdo->query("SOME KIND OF SHIT");
     }
 
@@ -270,12 +270,11 @@ class CommonTest extends TestCaseConfigAndDatabase
      *
      * @return void
      * @cover ExcavatingTrait::getResult
-     * @todo PHP >=5.5: Replace "PDOException" with PDOException::class.
      */
     public function testExceptionOnInvalidCommit()
     {
         $pdo = $this->connectDatabase();
-        $this->setExpectedException("PDOException", "There is no active transaction");
+        $this->setExpectedException(PDOException::class, "There is no active transaction");
         $pdo->commit();
     }
 }
