@@ -2,19 +2,22 @@
 [![GitHub license](https://img.shields.io/github/license/deepeloper/pdo-debugging.svg)](https://github.com/deepeloper/pdo-debugging/blob/master/LICENSE)
 
 ## Compatibility
+[![PHP ^5.6](https://img.shields.io/badge/PHP%C2%A0%C2%A0-%5E5.6-%237A86B8)]() &oline;&oline;&#10078;
+[![1.2.0](https://img.shields.io/badge/Release-1.2.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/1.1.0)
+
+[![PHP ^5.5](https://img.shields.io/badge/PHP%C2%A0%C2%A0-%5E5.5-%237A86B8)]() &oline;&oline;&#10078;
+[![1.1.0](https://img.shields.io/badge/Release-1.1.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/1.1.0)
+
 [![PHP ^5.4](https://img.shields.io/badge/PHP%C2%A0%C2%A0-%5E5.4-%237A86B8)]() &oline;&oline;&#10078;
 [![1.0.0](https://img.shields.io/badge/Release-1.0.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/1.0.0)
 
-[![PHP ^5.5](https://img.shields.io/badge/PHP%C2%A0%C2%A0-%5E5.5-%237A86B8)]() &oline;&oline;&#10078;
-[![1.0.0](https://img.shields.io/badge/Release-1.1.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/1.1.0)
-
 ## Installation
-`composer require deepeloper/pdo-debugging "^1.1"`   
+`composer require deepeloper/pdo-debugging "^1.2"`   
 
 or add to "composer.json" section
 ```json
 "require": {
-    "deepeloper/pdo-debugging": "^1.1"
+    "deepeloper/pdo-debugging": "^1.2"
 }
 ```
 
