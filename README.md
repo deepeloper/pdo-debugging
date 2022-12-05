@@ -7,12 +7,12 @@
 
 
 ## Installation
-`composer --no-dev require deepeloper/pdo-debugging` 
+`composer require deepeloper/pdo-debugging "^1.0"`   
 
 or add to "composer.json" section
 ```json
 "require": {
-    "deepeloper/pdo-debugging": "^1"
+    "deepeloper/pdo-debugging": "^1.0"
 }
 ```
 
