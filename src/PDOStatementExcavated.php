@@ -15,6 +15,8 @@ use PDOStatement;
 
 /**
  * PDOStatement having benchmarking and debugging abilities class.
+ *
+ * @todo PHP >=8: Explore PDOStatement::getIterator().
  */
 class PDOStatementExcavated extends PDOStatement
 {
