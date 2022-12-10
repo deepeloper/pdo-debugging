@@ -1,6 +1,7 @@
 .idea
 .stuff
 
+build/bin/phpDocumentor.phar
 build/config/.phpunit.result.cache
 build/logs/*
 build/output/*
