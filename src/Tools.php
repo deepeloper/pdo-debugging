@@ -12,6 +12,14 @@ namespace deepeloper\PDO;
 use PDO;
 use PDOStatement;
 
+use function array_keys;
+use function array_map;
+use function array_merge;
+use function array_values;
+use function implode;
+use function preg_match;
+use function sprintf;
+
 /**
  * PDO related library.
  *
@@ -54,44 +62,44 @@ class Tools
      * @return PDOStatement
      */
     public static function prepareModifyingStatement(
-        $pdo,
-        $template,
+        PDO $pdo,
+        string $template,
         array $record,
         array $types = [],
         array $rawValues = []
-    ) {
-        $fields = \array_map(
+    ): PDOStatement {
+        $fields = array_map(
             function ($field) {
-                return \sprintf("`%s`", $field);
+                return sprintf("`%s`", $field);
             },
             array_merge(array_keys($record), array_keys($rawValues))
         );
-        $placeholders = \array_merge(
-            \array_map(
+        $placeholders = array_merge(
+            array_map(
                 function ($field) {
-                    return \sprintf(":%s", $field);
+                    return sprintf(":%s", $field);
                 },
-                \array_keys($record)
+                array_keys($record)
             ),
-            \array_values($rawValues)
+            array_values($rawValues)
         );
-        if (\preg_match("/^\s?insert\s+/i", $template)) {
-            $query = \sprintf(
+        if (preg_match("/^\s?insert\s+/i", $template)) {
+            $query = sprintf(
                 $template,
-                \sprintf(
+                sprintf(
                     "(%s) VALUES (%s)",
-                    \implode(", ", $fields),
-                    \implode(", ", $placeholders)
+                    implode(", ", $fields),
+                    implode(", ", $placeholders)
                 )
             );
         } else {
             $set = [];
             foreach ($fields as $index => $field) {
-                $set[] = \sprintf("%s = %s", $field, $placeholders[$index]);
+                $set[] = sprintf("%s = %s", $field, $placeholders[$index]);
             }
-            $query = \sprintf(
+            $query = sprintf(
                 $template,
-                \sprintf("SET %s", implode(", ", $set))
+                sprintf("SET %s", implode(", ", $set))
             );
         }
 

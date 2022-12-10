@@ -9,9 +9,17 @@
 
 namespace deepeloper\PDO;
 
-use PDO;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
+use function array_replace_recursive;
+use function is_array;
+use function ob_end_clean;
+use function ob_get_contents;
+use function ob_start;
+use function passthru;
+use function sprintf;
+use function var_export;
 
 /**
  * Config and database related functionality.
@@ -46,7 +54,7 @@ abstract class TestCaseConfigAndDatabase extends TestCase
         parent::setUpBeforeClass();
 
         static::$config = require("tests/config/config.php");
-        $command = \sprintf(
+        $command = sprintf(
             static::$config['db']['commands']['create'],
             static::$config['db']['username']
         );
@@ -61,7 +69,7 @@ abstract class TestCaseConfigAndDatabase extends TestCase
     public static function tearDownAfterClass()
     {
         if (isset(self::$config['db']['commands']['drop'])) {
-            $command = \sprintf(
+            $command = sprintf(
                 self::$config['db']['commands']['drop'],
                 self::$config['db']['username'],
                 self::$config['db']['name']
@@ -78,17 +86,17 @@ abstract class TestCaseConfigAndDatabase extends TestCase
      * @param string $command
      * @return void
      */
-    protected static function executeCommand($command)
+    protected static function executeCommand(string $command)
     {
-        \ob_start();
-        \passthru($command, $result);
-        $output = \ob_get_contents();
-        \ob_end_clean();
+        ob_start();
+        passthru($command, $result);
+        $output = ob_get_contents();
+        ob_end_clean();
         if (0 !== $result) {
-            throw new RuntimeException(\sprintf(
+            throw new RuntimeException(sprintf(
                 "Cannot execute '%s' command, output: %s",
                 $command,
-                \var_export($output, true)
+                var_export($output, true)
             ));
         }
     }
@@ -100,19 +108,19 @@ abstract class TestCaseConfigAndDatabase extends TestCase
      * @param string $pdoClassName
      * @return PDOExcavated
      */
-    protected function connectDatabase(
+    protected static function connectDatabase(
         array $debuggingOptions = null,
-        $pdoClassName = "\\deepeloper\\PDO\\PDOExcavated"
-    ) {
+        string $pdoClassName = "\\deepeloper\\PDO\\PDOExcavated"
+    ): PDOExcavated {
         $options = static::$config['db']['options'];
-        if (\is_array($debuggingOptions)) {
-            $options[PDOExcavated::ATTR_DEBUG] = \array_replace_recursive(
+        if (is_array($debuggingOptions)) {
+            $options[PDOExcavated::ATTR_DEBUG] = array_replace_recursive(
                 $options[PDOExcavated::ATTR_DEBUG],
                 $debuggingOptions
             );
         }
         return new $pdoClassName(
-            \sprintf(static::$config['db']['dsn'], static::$config['db']['name']),
+            sprintf(static::$config['db']['dsn'], static::$config['db']['name']),
             static::$config['db']['username'],
             static::$config['db']['password'],
             $options

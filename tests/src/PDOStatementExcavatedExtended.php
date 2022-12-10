@@ -33,7 +33,7 @@ class PDOStatementExcavatedExtended extends PDOStatementExcavated
      * @return void
      * @link ExcavatingTrait::after()
      */
-    protected function prepareQueryForLogging(&$query)
+    protected function prepareQueryForLogging(string &$query)
     {
     }
 }

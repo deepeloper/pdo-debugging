@@ -12,6 +12,17 @@ namespace deepeloper\PDO;
 use DateTime;
 use PDOException;
 
+use function array_diff_key;
+use function array_pop;
+use function array_replace_recursive;
+use function debug_backtrace;
+use function json_encode;
+use function microtime;
+use function preg_match;
+use function sizeof;
+use function sprintf;
+use function str_replace;
+
 /**
  * PDO debugging trait.
  *
@@ -38,10 +49,10 @@ trait ExcavatingTrait
             'timeStamp' => "Y-m-d H:i:s.u",
             'precision' => "%.05f",
             'count' => "%03d",
-            // @codingStandardsIgnoreStart
+            // phpcs:disable
             'call'  => "[ %TIME_STAMP% ] [ %EXECUTION_TIME% ] [ CALL  ] [ %DSN%;user=%USER_NAME% ] [ %SOURCE%(%ARGS%) ]",
             'query' => "[ %TIME_STAMP% ] [ %EXECUTION_TIME% ] [ QUERY ] [ %DSN%;user=%USER_NAME% ] [ #%COUNT% ] [ %SOURCE% ] [ %QUERY% ]",
-            // @codingStandardsIgnoreEnd
+            // phpcs:enable
         ],
         'sources' => [
         ],
@@ -75,12 +86,11 @@ trait ExcavatingTrait
     /**
      * Prepares query for logging.
      *
-     * @param string &$query
+     * @param string $query
      * @return void
      * @link self::after()
      */
-    abstract protected function prepareQueryForLogging(&$query);
-
+    abstract protected function prepareQueryForLogging(string &$query);
 
     /**
      * Initializes debugging.
@@ -91,7 +101,7 @@ trait ExcavatingTrait
      */
     public function initDebugging(array $options = [], BenchmarksContainer $benchmarkContainer = null)
     {
-        $this->debuggingOptions = \array_replace_recursive($this->debuggingOptions, $options);
+        $this->debuggingOptions = array_replace_recursive($this->debuggingOptions, $options);
         $this->benchmarks = null !== $benchmarkContainer ? $benchmarkContainer : new BenchmarksContainer();
     }
 
@@ -101,7 +111,7 @@ trait ExcavatingTrait
      * @return array
      * @see PDOStatementExcavated::__construct()
      */
-    public function getDebuggingEnvironment()
+    public function getDebuggingEnvironment(): array
     {
         return [$this->debuggingOptions, $this->benchmarks];
     }
@@ -111,7 +121,7 @@ trait ExcavatingTrait
      *
      * @return array
      */
-    public function getBenchmarks()
+    public function getBenchmarks(): array
     {
         return $this->benchmarks->container;
     }
@@ -129,22 +139,22 @@ trait ExcavatingTrait
             return;
         }
         if (null === $args) {
-            $trace = \debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
-            $source = \sprintf("%s::%s", $trace[1]['class'], $trace[1]['function']);
+            $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
+            $source = sprintf("%s::%s", $trace[1]['class'], $trace[1]['function']);
             $args = $trace[1]['args'];
         } else {
             $source = $args['source'];
             unset($args['source']);
         }
         if (null !== $excludeArgIndexes) {
-            $args = \array_diff_key($args, array_combine($excludeArgIndexes, $excludeArgIndexes));
+            $args = array_diff_key($args, array_combine($excludeArgIndexes, $excludeArgIndexes));
         }
-        \preg_match("/\w+::.+$/", $source, $matches);
+        preg_match("/\w+::.+$/", $source, $matches);
         $source = $matches[0];
         $dateTime = new DateTime();
         $call = [
             'timeStamp' => $dateTime->format($this->debuggingOptions['format']['timeStamp']),
-            'microTime' => \microtime(true),
+            'microTime' => microtime(true),
             'source' => $source,
         ];
         if (empty($args['query'])) {
@@ -160,26 +170,25 @@ trait ExcavatingTrait
      * called or about query.
      *
      * @return void
-     * @todo PHP >=7: Add comma after last element of array, no problem with code coverage.
      */
     protected function after()
     {
         if ($this->skipLogging) {
             return;
         }
-        $call = \array_pop($this->stack);
+        $call = array_pop($this->stack);
         $scope = [
             'TIME_STAMP' => $call['timeStamp'],
             'DSN' => $this->debuggingOptions['dsn'],
             'USER_NAME' => $this->debuggingOptions['username'],
-            'EXECUTION_TIME' => \sprintf(
+            'EXECUTION_TIME' => sprintf(
                 $this->debuggingOptions['format']['precision'],
-                \microtime(true) - $call['microTime']
+                microtime(true) - $call['microTime']
             ),
             'SOURCE' => $call['source'],
         ];
         if (empty($call['query'])) {
-            $scope['ARGS'] = \json_encode($call['args'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $scope['ARGS'] = json_encode($call['args'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         } else {
             $this->prepareQueryForLogging($call['query']);
             $scope += [
@@ -187,11 +196,11 @@ trait ExcavatingTrait
                 'COUNT' => $this->benchmarks->container['query']['count'],
             ];
         }
-        $log = 0 === \sizeof($this->debuggingOptions['sources']);
+        $log = 0 === sizeof($this->debuggingOptions['sources']);
         if (!$log) {
             foreach ($this->debuggingOptions['sources'] as $pattern) {
                 $log = substr($pattern, 0, 1) === "/"
-                    ? \preg_match($pattern, $call['source'])
+                    ? preg_match($pattern, $call['source'])
                     : $pattern === $call['source'];
                 if ($log) {
                     break;
@@ -202,7 +211,7 @@ trait ExcavatingTrait
         if ($log) {
             $this->scope($scope);
             if (isset($scope['COUNT'])) {
-                $scope['COUNT'] = \sprintf($this->debuggingOptions['format']['count'], $scope['COUNT']);
+                $scope['COUNT'] = sprintf($this->debuggingOptions['format']['count'], $scope['COUNT']);
             }
             $this->debuggingOptions['logger']->log(
                 $this->renderLogMessage($this->debuggingOptions['format'][$format], $scope),
@@ -219,7 +228,7 @@ trait ExcavatingTrait
      * @param PDOException|null $e
      * @return mixed
      */
-    protected function getResult($delay, $result, PDOException $e = null)
+    protected function getResult(float $delay, $result, PDOException $e = null)
     {
         $this->benchmarks->container['total']['time'] += $delay;
         if (isset($this->statementBenchmarks)) {
@@ -240,10 +249,10 @@ trait ExcavatingTrait
      * @param array $scope
      * @return string
      */
-    protected function renderLogMessage($template, array $scope)
+    protected function renderLogMessage(string $template, array $scope): string
     {
         foreach ($scope as $name => $value) {
-            $template = \str_replace("%$name%", $value, $template);
+            $template = str_replace("%$name%", $value, $template);
         }
         return $template;
     }

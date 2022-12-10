@@ -13,6 +13,11 @@ use PDO;
 use PDOException;
 use stdClass;
 
+use function array_values;
+use function get_class;
+use function is_object;
+use function sizeof;
+
 /**
  * Common tests.
  */
@@ -68,7 +73,7 @@ class CommonTest extends TestCaseConfigAndDatabase
      */
     public function testClasses()
     {
-        $pdo = $this->connectDatabase();
+        $pdo = self::connectDatabase();
         $benchmarks = $pdo->getBenchmarks();
         $totalTime = $benchmarks['total']['time'];
         unset($benchmarks['total']);
@@ -132,7 +137,7 @@ class CommonTest extends TestCaseConfigAndDatabase
         self::assertGreaterThan(0, $benchmarks->container['fetch']['time']);
         $stmt->closeCursor();
         $stmt->execute();
-        self::assertEquals([\array_values($record)], $stmt->fetchAll(PDO::FETCH_NUM));
+        self::assertEquals([array_values($record)], $stmt->fetchAll(PDO::FETCH_NUM));
         $stmt->closeCursor();
         $stmt->execute();
         self::assertEquals([100500], $stmt->fetchAll(PDO::FETCH_COLUMN, 0));
@@ -170,8 +175,8 @@ class CommonTest extends TestCaseConfigAndDatabase
          * @var stdClass $result
          */
         $result = $stmt->fetch();
-        self::assertTrue(\is_object($result));
-        self::assertEquals("stdClass", \get_class($result));
+        self::assertTrue(is_object($result));
+        self::assertEquals("stdClass", get_class($result));
         self::assertEquals(5, $benchmarks->container['fetch']['count']);
 
         $stmt = $pdo->query(
@@ -196,7 +201,7 @@ class CommonTest extends TestCaseConfigAndDatabase
         self::assertEquals("1", $stmt->fetchColumn());
         $stmt->closeCursor();
         $stmt->execute();
-        self::assertEquals($expected, $stmt->fetchObject("stdClass"));
+        self::assertEquals($expected, $stmt->fetchObject());
 
         $stmt = $pdo->prepare("SELECT ?");
         $stmt->bindValue(1, 100500, PDO::PARAM_BOOL);
@@ -220,7 +225,7 @@ class CommonTest extends TestCaseConfigAndDatabase
         self::$log = [];
 
         $logger = new Logger(self::$log);
-        $pdo = $this->connectDatabase([
+        $pdo = self::connectDatabase([
             'logger' => $logger,
             'sources' => [
                 "/^PDOStatementExcavated::/",
@@ -228,20 +233,20 @@ class CommonTest extends TestCaseConfigAndDatabase
         ]);
         $stmt = $pdo->prepare("SELECT ?");
         $stmt->execute(["ED"]);
-        self::assertEquals(1, \sizeof(self::$log));
+        self::assertEquals(1, sizeof(self::$log));
         $pdo->query("SELECT 1");
-        self::assertEquals(1, \sizeof(self::$log));
+        self::assertEquals(1, sizeof(self::$log));
         $stmt = $pdo->prepare("SELECT ?");
         $stmt->bindValue(1, 100500, PDO::PARAM_INT);
         $stmt->execute();
-        self::assertEquals(2, \sizeof(self::$log));
+        self::assertEquals(2, sizeof(self::$log));
 
         $stmt = $pdo->prepare("SELECT ?");
         $stmt->bindValue(1, 100500, PDO::PARAM_INT);
         $stmt->execute();
 
         self::$log = [];
-        $pdo = $this->connectDatabase([
+        $pdo = self::connectDatabase([
             'logger' => $logger,
             'sources' => [
                 "/^PDOExcavated::/",
@@ -260,9 +265,9 @@ class CommonTest extends TestCaseConfigAndDatabase
      */
     public function testExceptionOnWrongQuery()
     {
-        $pdo = $this->connectDatabase();
+        $pdo = self::connectDatabase();
         $this->expectException(PDOException::class);
-        $stmt = $pdo->query("SOME KIND OF SHIT");
+        $pdo->query("SOME KIND OF SHIT");
     }
 
     /**
@@ -273,7 +278,7 @@ class CommonTest extends TestCaseConfigAndDatabase
      */
     public function testExceptionOnInvalidCommit()
     {
-        $pdo = $this->connectDatabase();
+        $pdo = self::connectDatabase();
         $this->expectException(PDOException::class);
         $this->expectExceptionMessage("There is no active transaction");
         $pdo->commit();

@@ -38,7 +38,7 @@ class Logger implements LoggerInterface
      * @param array $scope
      * @return void
      */
-    public function log($message, array $scope)
+    public function log(string $message, array $scope)
     {
         // echo "$message\n";
         $this->log[] = $message;

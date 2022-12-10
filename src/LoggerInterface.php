@@ -22,5 +22,5 @@ interface LoggerInterface
      * @return void
      * @link ExcavatingTrait::after()
      */
-    public function log($message, array $scope);
+    public function log(string $message, array $scope);
 }

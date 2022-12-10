@@ -12,18 +12,25 @@ namespace deepeloper\PDO;
 use PDO;
 
 /**
+ * Autoload doesn't work in PHP 7.0 / PHPUnit "^6".
+ *
+ * @todo Explore possibility to avoid inclusion of the file in PHP >=7.1
+ * phpcs:disable
+ */
+require_once "./tests/src/PDOExcavatedExtended.php";
+// phpcs:enable
+
+/**
  * Extended PDOExcavated and PDOStatementExcavated classes tests.
  */
 class ExtendedClassesTest extends TestCaseConfigAndDatabase
 {
-    public function testGetAvailableDrivers()
+    public function testExtension()
     {
-        $logger = new Logger(self::$log);
-
         self::$log = [];
 
         $logger = new Logger(self::$log);
-        $pdo = $this->connectDatabase(
+        $pdo = self::connectDatabase(
             [
                 'logger' => $logger,
                 'format' => [

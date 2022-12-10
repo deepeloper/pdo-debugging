@@ -13,6 +13,11 @@ use PDO;
 use PDOException;
 use PDOStatement;
 
+use function is_array;
+use function is_object;
+use function microtime;
+use function sprintf;
+
 /**
  * PDO having benchmarking and debugging abilities class.
  */
@@ -22,10 +27,10 @@ class PDOExcavated extends PDO
 
     /**
      * @todo PHP >=7.1: Add visibility and remove ignorance.
-     * @codingStandardsIgnoreStart
+     * phpcs:disable
      */
     const ATTR_DEBUG = "debug";
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 
     /**
      * Represents a connection between PHP and a database server.
@@ -36,7 +41,7 @@ class PDOExcavated extends PDO
      * @param array $options
      * @see https://www.php.net/manual/en/class.pdo.php
      */
-    public function __construct($dsn, $username = null, $password = null, array $options = [])
+    public function __construct(string $dsn, string $username = null, string $password = null, array $options = [])
     {
         if (isset($options[self::ATTR_DEBUG])) {
             $this->initDebugging(
@@ -51,9 +56,9 @@ class PDOExcavated extends PDO
             unset($options[self::ATTR_DEBUG]);
         }
         $this->before(null, [2, 3]);
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         parent::__construct($dsn, $username, $password, $options);
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         $this->benchmarks->container['total']['time'] += $delay;
         $this->after();
     }
@@ -64,19 +69,19 @@ class PDOExcavated extends PDO
      * @return bool
      * @see https://www.php.net/manual/en/pdo.begintransaction.php
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         $this->before();
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
             $result = parent::beginTransaction();
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         return $this->getResult($delay, $result, $e);
     }
 
@@ -86,19 +91,19 @@ class PDOExcavated extends PDO
      * @return bool
      * @see https://www.php.net/manual/en/pdo.commit.php
      */
-    public function commit()
+    public function commit(): bool
     {
         $this->before();
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
             $result = parent::commit();
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         $this->benchmarks->container['commit']['time'] += $delay;
         $this->benchmarks->container['commit']['count']++;
         return $this->getResult($delay, $result, $e);
@@ -111,7 +116,7 @@ class PDOExcavated extends PDO
      * @return int
      * @see https://www.php.net/manual/en/pdo.exec.php
      */
-    public function exec($statement)
+    public function exec($statement): int
     {
         $this->before([
             'source' => __METHOD__,
@@ -119,14 +124,14 @@ class PDOExcavated extends PDO
         ]);
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
             $result = parent::exec($statement);
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         $this->benchmarks->container['query']['time'] += $delay;
         $this->benchmarks->container['query']['count']++;
         return $this->getResult($delay, $result, $e);
@@ -137,22 +142,22 @@ class PDOExcavated extends PDO
      *
      * @param string $query
      * @param array $options
-     * @return PDOStatementExcavated
+     * @return PDOStatement
      * @see https://www.php.net/manual/en/pdo.prepare.php
      */
-    public function prepare($query, $options = [])
+    public function prepare($query, $options = null): PDOStatement
     {
         $this->before();
         $stmt = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
-            $stmt = parent::prepare($query, $options);
+            $stmt = is_array($options) ? parent::prepare($query, $options) : parent::prepare($query);
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         return $this->getResultStatement($delay, "prepare", $query, $stmt, $e);
     }
 
@@ -163,18 +168,22 @@ class PDOExcavated extends PDO
      * @param int $mode
      * @param mixed $arg3
      * @param array $constructorArgs
-     * @return PDOStatementExcavated
+     * @return PDOStatement
      * @see https://www.php.net/manual/en/pdo.query.php
      */
-    public function query($statement, $mode = PDO::ATTR_DEFAULT_FETCH_MODE, $arg3 = null, array $constructorArgs = [])
-    {
+    public function query(
+        string $statement,
+        int $mode = PDO::ATTR_DEFAULT_FETCH_MODE,
+        $arg3 = null,
+        array $constructorArgs = []
+    ): PDOStatement {
         $this->before([
-            'source' => \sprintf("%s::query", __CLASS__),
+            'source' => sprintf("%s::query", __CLASS__),
             'query' => $statement,
         ]);
         $stmt = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
             switch ($mode) {
                 case PDO::ATTR_DEFAULT_FETCH_MODE:
@@ -194,7 +203,7 @@ class PDOExcavated extends PDO
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         return $this->getResultStatement($delay, "query", $statement, $stmt, $e);
     }
 
@@ -204,12 +213,12 @@ class PDOExcavated extends PDO
      * @return bool
      * @see https://www.php.net/manual/en/pdo.rollback.php
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         $this->before();
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
             $result = parent::rollBack();
             // @codeCoverageIgnoreStart
@@ -217,7 +226,7 @@ class PDOExcavated extends PDO
             // @codeCoverageIgnoreEnd
         }
         // @codeCoverageIgnoreEnd
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         $this->benchmarks->container['rollBack']['time'] += $delay;
         $this->benchmarks->container['rollBack']['count']++;
         return $this->getResult($delay, $result, $e);
@@ -226,11 +235,11 @@ class PDOExcavated extends PDO
     /**
      * Prepares query for logging.
      *
-     * @param string &$query
+     * @param string $query
      * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function prepareQueryForLogging(&$query)
+    protected function prepareQueryForLogging(string &$query)
     {
     }
 
@@ -253,18 +262,23 @@ class PDOExcavated extends PDO
      * @param string $template
      * @param PDOStatement $stmt
      * @param PDOException|null $e
-     * @return PDOStatementExcavated
+     * @return PDOStatement
      * @see self::prepare()
      * @see self::query()
      */
-    protected function getResultStatement($delay, $key, $template, $stmt, PDOException $e = null)
-    {
+    protected function getResultStatement(
+        float $delay,
+        string $key,
+        string $template,
+        PDOStatement $stmt = null,
+        PDOException $e = null
+    ): PDOStatement {
         $this->benchmarks->container[$key]['count']++;
         $this->benchmarks->container[$key]['time'] += $delay;
         $this->benchmarks->container['total']['time'] += $delay;
         $this->after();
-        if (isset($stmt)) {
-            return \is_object($stmt) ? $this->getStatement($template, $stmt) : $stmt;
+        if ($stmt) {
+            return is_object($stmt) ? $this->getStatement($template, $stmt) : $stmt;
         } else {
             throw $e;
         }
@@ -278,7 +292,7 @@ class PDOExcavated extends PDO
      * @return PDOStatementExcavated
      * @see self::getResultStatement()
      */
-    protected function getStatement($template, PDOStatement $stmt)
+    protected function getStatement(string $template, PDOStatement $stmt): PDOStatementExcavated
     {
         return new PDOStatementExcavated($template, $this, $stmt);
     }

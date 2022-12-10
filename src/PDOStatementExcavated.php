@@ -13,6 +13,15 @@ use PDO;
 use PDOException;
 use PDOStatement;
 
+use function is_array;
+use function is_int;
+use function is_string;
+use function microtime;
+use function sizeof;
+use function sprintf;
+use function str_replace;
+use function uniqid;
+
 /**
  * PDOStatement having benchmarking and debugging abilities class.
  *
@@ -84,7 +93,7 @@ class PDOStatementExcavated extends PDOStatement
      * @param PDOExcavated $pdo
      * @param PDOStatement $stmt
      */
-    public function __construct($template, PDOExcavated $pdo, PDOStatement $stmt)
+    public function __construct(string $template, PDOExcavated $pdo, PDOStatement $stmt)
     {
         $this->template = $template;
         $this->pdo = $pdo;
@@ -101,7 +110,7 @@ class PDOStatementExcavated extends PDOStatement
      *
      * @return string
      */
-    public function getQueryString()
+    public function getQueryString(): string
     {
         return $this->template;
     }
@@ -111,7 +120,7 @@ class PDOStatementExcavated extends PDOStatement
      *
      * @return array
      */
-    public function getBenchmarks()
+    public function getBenchmarks(): array
     {
         return $this->statementBenchmarks;
     }
@@ -121,7 +130,7 @@ class PDOStatementExcavated extends PDOStatement
      *
      * @return string
      */
-    public function getLastExecutedQuery()
+    public function getLastExecutedQuery(): string
     {
         return $this->lastExecutedQuery;
     }
@@ -131,14 +140,14 @@ class PDOStatementExcavated extends PDOStatement
      *
      * @param $column
      * @param $var
-     * @param $type
-     * @param $maxLength
+     * @param int $type
+     * @param int $maxLength
      * @param $driverOptions
      * @return bool
      * @see https://www.php.net/manual/en/pdostatement.bindcolumn.php
      * @codeCoverageIgnore
      */
-    public function bindColumn($column, &$var, $type = PDO::PARAM_STR, $maxLength = 0, $driverOptions = null)
+    public function bindColumn($column, &$var, $type = PDO::PARAM_STR, $maxLength = 0, $driverOptions = null): bool
     {
         return $this->stmt->bindColumn($column, $var, $type, $maxLength, $driverOptions);
     }
@@ -155,7 +164,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.bindparam.php
      * @codeCoverageIgnore
      */
-    public function bindParam($param, &$var, $type = PDO::PARAM_STR, $maxLength = 0, $driverOptions = null)
+    public function bindParam($param, &$var, $type = PDO::PARAM_STR, $maxLength = 0, $driverOptions = null): bool
     {
         $this->values[$param] = [&$var, $type];
         return $this->stmt->bindParam($param, $var, $type);
@@ -171,7 +180,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.bindvalue.php
      * @codeCoverageIgnore
      */
-    public function bindValue($param, $value, $type = PDO::PARAM_STR)
+    public function bindValue($param, $value, $type = PDO::PARAM_STR): bool
     {
         $this->values[$param] = [$value, $type];
         return $this->stmt->bindValue($param, $value, $type);
@@ -184,7 +193,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.closecursor.php
      * @codeCoverageIgnore
      */
-    public function closeCursor()
+    public function closeCursor(): bool
     {
         return $this->stmt->closeCursor();
     }
@@ -196,7 +205,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.columncount.php
      * @codeCoverageIgnore
      */
-    public function columnCount()
+    public function columnCount(): int
     {
         return $this->stmt->columnCount();
     }
@@ -220,7 +229,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.errorcode.php
      * @codeCoverageIgnore
      */
-    public function errorCode()
+    public function errorCode(): string
     {
         return $this->stmt->errorCode();
     }
@@ -232,7 +241,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.errorinfo.php
      * @codeCoverageIgnore
      */
-    public function errorInfo()
+    public function errorInfo(): array
     {
         return $this->stmt->errorInfo();
     }
@@ -240,15 +249,15 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Executes a prepared statement.
      *
-     * @param array $inputParameters
+     * @param array $params
      * @return bool
      * @see https://www.php.net/manual/en/pdostatement.execute.php
      */
-    public function execute($inputParameters = null)
+    public function execute($params = null): bool
     {
-        if (\is_array($inputParameters)) {
-            foreach ($inputParameters as $parameter => $value) {
-                $this->bindValue(\is_int($parameter) ? $parameter + 1 : $parameter, $value);
+        if (is_array($params)) {
+            foreach ($params as $param => $value) {
+                $this->bindValue(is_int($param) ? $param + 1 : $param, $value);
             }
         }
         $this->benchmarks->container['query']['count']++;
@@ -256,14 +265,14 @@ class PDOStatementExcavated extends PDOStatement
         $this->render();
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
             $result = $this->stmt->execute();
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         $this->benchmarks->container['query']['time'] += $delay;
         $this->statementBenchmarks['query']['time'] += $delay;
         return $this->getResult($delay, $result, $e);
@@ -272,118 +281,118 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches the next row from a result set.
      *
-     * @param int $fetchStyle
+     * @param int $mode
      * @param int $cursorOrientation
      * @param int $cursorOffset
      * @return mixed
      * @see https://www.php.net/manual/en/pdostatement.fetch.php
      */
-    public function fetch($fetchStyle = null, $cursorOrientation = PDO::FETCH_ORI_NEXT, $cursorOffset = 0)
+    public function fetch($mode = null, $cursorOrientation = PDO::FETCH_ORI_NEXT, $cursorOffset = 0)
     {
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
-            $result = $this->stmt->fetch($fetchStyle, $cursorOrientation, $cursorOffset);
+            $result = $this->stmt->fetch($mode, $cursorOrientation, $cursorOffset);
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         return $this->getFetchResult($delay, $result, $e);
     }
 
     /**
      * Fetches the remaining rows from a result set.
      *
-     * @param int $fetchStyle
-     * @param mixed $fetchArgument
-     * @param array $constructorArgs
+     * @param int $mode
+     * @param mixed $fetch_argument
+     * @param array $args Constructor arguments
      * @return array
      * @see https://www.php.net/manual/en/pdostatement.fetchall.php
      */
-    public function fetchAll($fetchStyle = null, $fetchArgument = null,  $constructorArgs = null)
+    public function fetchAll($mode = null, $fetch_argument = null, $args = null): array
     {
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
-            if (null === $fetchStyle) {
+            if (null === $mode) {
                 $result = $this->stmt->fetchAll();
-            } elseif (null === $fetchArgument) {
-                $result = $this->stmt->fetchAll($fetchStyle);
-            } elseif (null === $constructorArgs) {
-                $result = $this->stmt->fetchAll($fetchStyle, $fetchArgument);
+            } elseif (null === $fetch_argument) {
+                $result = $this->stmt->fetchAll($mode);
+            } elseif (null === $args) {
+                $result = $this->stmt->fetchAll($mode, $fetch_argument);
             } else {
-                $result = $this->stmt->fetchAll($fetchStyle, $fetchArgument, $constructorArgs);
+                $result = $this->stmt->fetchAll($mode, $fetch_argument, $args);
             }
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         return $this->getFetchResult($delay, $result, $e);
     }
 
     /**
      * Returns a single column from the next row of a result set.
      *
-     * @param int $columnNumber
+     * @param int $column Column number
      * @return mixed
      * @see https://www.php.net/manual/en/pdostatement.fetchcolumn.php
      */
-    public function fetchColumn($columnNumber = 0)
+    public function fetchColumn($column = 0)
     {
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
-            $result = $this->stmt->fetchColumn($columnNumber);
+            $result = $this->stmt->fetchColumn($column);
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         return $this->getFetchResult($delay, $result, $e);
     }
 
     /**
      * Fetches the next row and returns it as an object.
      *
-     * @param string $className
+     * @param string $class
      * @param array $constructorArgs
-     * @return array
+     * @return object
      * @see https://www.php.net/manual/en/pdostatement.fetchobject.php
      */
-    public function fetchObject($className = null, $constructorArgs = null)
+    public function fetchObject($class = null, $constructorArgs = null)
     {
         $result = null;
         $e = null;
-        $timeStamp = \microtime(true);
+        $timeStamp = microtime(true);
         try {
             if (null === $constructorArgs) {
                 $constructorArgs = [];
             }
-            $result = $this->stmt->fetchObject($className, $constructorArgs);
+            $result = $this->stmt->fetchObject($class, $constructorArgs);
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
             // @codeCoverageIgnoreEnd
         }
-        $delay = \microtime(true) - $timeStamp;
+        $delay = microtime(true) - $timeStamp;
         return $this->getFetchResult($delay, $result, $e);
     }
 
     /**
      * Retrieves a statement attribute.
      *
-     * @param int $attribute
+     * @param int $name
      * @return mixed
      * @see https://www.php.net/manual/en/pdostatement.getattribute.php
      * @codeCoverageIgnore
      */
-    public function getAttribute($attribute)
+    public function getAttribute($name)
     {
-        return $this->stmt->getAttribute($attribute);
+        return $this->stmt->getAttribute($name);
     }
 
     /**
@@ -394,7 +403,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.getcolumnmeta.php
      * @codeCoverageIgnore
      */
-    public function getColumnMeta($column)
+    public function getColumnMeta($column): array
     {
         return $this->stmt->getColumnMeta($column);
     }
@@ -406,7 +415,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.nextrowset.php
      * @codeCoverageIgnore
      */
-    public function nextRowset()
+    public function nextRowset(): bool
     {
         return $this->stmt->nextRowset();
     }
@@ -418,7 +427,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.rowcount.php
      * @codeCoverageIgnore
      */
-    public function rowCount()
+    public function rowCount(): int
     {
         return $this->stmt->rowCount();
     }
@@ -432,7 +441,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.setattribute.php
      * @codeCoverageIgnore
      */
-    public function setAttribute($attribute, $value)
+    public function setAttribute($attribute, $value): bool
     {
         return $this->stmt->setAttribute($attribute, $value);
     }
@@ -446,7 +455,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.setfetchmode.php
      * @codeCoverageIgnore
      */
-    public function setFetchMode($mode, $params = null)
+    public function setFetchMode($mode, $params = null): bool
     {
         return $this->stmt->setFetchMode($mode);
     }
@@ -465,11 +474,11 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Prepares query for logging.
      *
-     * @param string &$query
+     * @param string $query
      * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function prepareQueryForLogging(&$query)
+    protected function prepareQueryForLogging(string &$query)
     {
     }
 
@@ -482,15 +491,15 @@ class PDOStatementExcavated extends PDOStatement
     protected function render()
     {
         $query = $this->template;
-        if (\sizeof($this->values) > 0) {
-            $marker = \uniqid("-") . "-";
-            $query = \str_replace("?", $marker, $query);
-            $search = \sprintf("/%s/", preg_quote($marker, "/"));
+        if (sizeof($this->values) > 0) {
+            $marker = uniqid("-") . "-";
+            $query = str_replace("?", $marker, $query);
+            $search = sprintf("/%s/", preg_quote($marker, "/"));
             foreach ($this->values as $field => $data) {
                 $dataType = $data[1] & ~PDO::PARAM_INPUT_OUTPUT;
                 switch ($dataType) {
                     case PDO::PARAM_BOOL:
-                        $value = \is_int($data[0]) ? (int)(bool)$data[0] : $data[0];
+                        $value = is_int($data[0]) ? (int)(bool)$data[0] : $data[0];
                         break;
                     case PDO::PARAM_INT:
                         $value = (int)$data[0];
@@ -499,19 +508,19 @@ class PDOStatementExcavated extends PDOStatement
                         $value = $this->pdo->quote($data[0], $data[1]);
                         break;
                 }
-                $query = \is_string($field)
-                    ? \str_replace(
+                $query = is_string($field)
+                    ? str_replace(
                         ":$field",
                         $value,
                         $query
                     )
                     : preg_replace($search, $value, $query);
             }
-            $query = \str_replace($marker, "?", $query);
+            $query = str_replace($marker, "?", $query);
         }
         $this->lastExecutedQuery = $query;
         $this->before([
-            'source' => \sprintf("%s::execute", __CLASS__),
+            'source' => sprintf("%s::execute", __CLASS__),
             'query' => $query,
         ]);
     }
@@ -528,7 +537,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see self::fetchColumn()
      * @see self::fetchObject()
      */
-    protected function getFetchResult($delay, $result, PDOException $e = null)
+    protected function getFetchResult(float $delay, $result, PDOException $e = null)
     {
         $this->benchmarks->container['fetch']['count']++;
         $this->statementBenchmarks['fetch']['count']++;
