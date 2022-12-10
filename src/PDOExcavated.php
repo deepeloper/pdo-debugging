@@ -72,7 +72,9 @@ class PDOExcavated extends PDO
         $timeStamp = \microtime(true);
         try {
             $result = parent::beginTransaction();
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         return $this->getResult($delay, $result, $e);
@@ -92,7 +94,9 @@ class PDOExcavated extends PDO
         $timeStamp = \microtime(true);
         try {
             $result = parent::commit();
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         $this->benchmarks->container['commit']['time'] += $delay;
@@ -118,7 +122,9 @@ class PDOExcavated extends PDO
         $timeStamp = \microtime(true);
         try {
             $result = parent::exec($statement);
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         $this->benchmarks->container['query']['time'] += $delay;
@@ -142,7 +148,9 @@ class PDOExcavated extends PDO
         $timeStamp = \microtime(true);
         try {
             $stmt = parent::prepare($query, $options);
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         return $this->getResultStatement($delay, "prepare", $query, $stmt, $e);
@@ -182,7 +190,9 @@ class PDOExcavated extends PDO
                         $stmt = parent::query($statement, $mode, $arg3);
                     }
             }
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         return $this->getResultStatement($delay, "query", $statement, $stmt, $e);
@@ -202,8 +212,11 @@ class PDOExcavated extends PDO
         $timeStamp = \microtime(true);
         try {
             $result = parent::rollBack();
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
+        // @codeCoverageIgnoreEnd
         $delay = \microtime(true) - $timeStamp;
         $this->benchmarks->container['rollBack']['time'] += $delay;
         $this->benchmarks->container['rollBack']['count']++;

@@ -31,12 +31,11 @@ trait ExcavatingTrait
      * Default debugging options
      *
      * @var array
-     * @todo PHP >=7: Set 'format->timeStamp' to "Y-m-d H:i:s.u".
      */
     protected $debuggingOptions = [
         'logger' => null,
         'format' => [
-            'timeStamp' => "Y-m-d H:i:s",
+            'timeStamp' => "Y-m-d H:i:s.u",
             'precision' => "%.05f",
             'count' => "%03d",
             // @codingStandardsIgnoreStart
@@ -185,7 +184,7 @@ trait ExcavatingTrait
             $this->prepareQueryForLogging($call['query']);
             $scope += [
                 'QUERY' => $call['query'],
-                'COUNT' => $this->benchmarks->container['query']['count']
+                'COUNT' => $this->benchmarks->container['query']['count'],
             ];
         }
         $log = 0 === \sizeof($this->debuggingOptions['sources']);

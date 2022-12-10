@@ -259,7 +259,9 @@ class PDOStatementExcavated extends PDOStatement
         $timeStamp = \microtime(true);
         try {
             $result = $this->stmt->execute();
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         $this->benchmarks->container['query']['time'] += $delay;
@@ -283,7 +285,9 @@ class PDOStatementExcavated extends PDOStatement
         $timeStamp = \microtime(true);
         try {
             $result = $this->stmt->fetch($fetchStyle, $cursorOrientation, $cursorOffset);
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         return $this->getFetchResult($delay, $result, $e);
@@ -298,7 +302,7 @@ class PDOStatementExcavated extends PDOStatement
      * @return array
      * @see https://www.php.net/manual/en/pdostatement.fetchall.php
      */
-    public function fetchAll($fetchStyle = null, $fetchArgument = null, $constructorArgs = null)
+    public function fetchAll($fetchStyle = null, $fetchArgument = null,  $constructorArgs = null)
     {
         $result = null;
         $e = null;
@@ -313,7 +317,9 @@ class PDOStatementExcavated extends PDOStatement
             } else {
                 $result = $this->stmt->fetchAll($fetchStyle, $fetchArgument, $constructorArgs);
             }
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         return $this->getFetchResult($delay, $result, $e);
@@ -333,7 +339,9 @@ class PDOStatementExcavated extends PDOStatement
         $timeStamp = \microtime(true);
         try {
             $result = $this->stmt->fetchColumn($columnNumber);
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         return $this->getFetchResult($delay, $result, $e);
@@ -357,7 +365,9 @@ class PDOStatementExcavated extends PDOStatement
                 $constructorArgs = [];
             }
             $result = $this->stmt->fetchObject($className, $constructorArgs);
+            // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
+            // @codeCoverageIgnoreEnd
         }
         $delay = \microtime(true) - $timeStamp;
         return $this->getFetchResult($delay, $result, $e);
