@@ -1,31 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.2/phpunit.xsd"
-        bootstrap="../../vendor/autoload.php"
-        colors="true"
-        verbose="true"
->
-    <php>
-        <ini name="error_reporting" value="-1" />
-    </php>
-
-    <testsuites>
-        <testsuite name="Tests">
-            <directory>../../tests</directory>
-            <exclude>../../tests/config</exclude>
-            <exclude>../../tests/src</exclude>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">../../src</directory>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="coverage-clover" target="../output/phpunit.coverage-clover.xml" />
-        <log type="coverage-html" target="../output/code-coverage" />
-    </logging>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="../../vendor/autoload.php" colors="true" verbose="true">
+  <coverage>
+    <include>
+      <directory suffix=".php">../../src</directory>
+    </include>
+    <report>
+      <clover outputFile="../output/phpunit.coverage-clover.xml"/>
+      <html outputDirectory="../output/code-coverage"/>
+    </report>
+  </coverage>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+  </php>
+  <testsuites>
+    <testsuite name="Tests">
+      <directory>../../tests</directory>
+      <exclude>../../tests/config</exclude>
+      <exclude>../../tests/src</exclude>
+    </testsuite>
+  </testsuites>
+  <logging/>
 </phpunit>
