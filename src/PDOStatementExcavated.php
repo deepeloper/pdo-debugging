@@ -9,6 +9,7 @@
 
 namespace deepeloper\PDO;
 
+use Iterator;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -24,8 +25,6 @@ use function uniqid;
 
 /**
  * PDOStatement having benchmarking and debugging abilities class.
- *
- * @todo PHP >=8: Explore PDOStatement::getIterator().
  */
 class PDOStatementExcavated extends PDOStatement
 {
@@ -90,6 +89,17 @@ class PDOStatementExcavated extends PDOStatement
         if (isset($debuggingOptions['logger'])) {
             $this->skipLogging = false;
         }
+    }
+
+    /**
+     * Gets result set iterator.
+     *
+     * @see https://www.php.net/manual/en/pdostatement.getiterator.php
+     * @codeCoverageIgnore
+     */
+    public function getIterator(): Iterator
+    {
+        return $this->stmt->getIterator();
     }
 
     /**
