@@ -44,8 +44,6 @@ abstract class TestCaseConfigAndDatabase extends TestCase
      * This method is called before the first test of this test class is run.
      *
      * Loads config ("tests/config/config.php") and create database ("tests/config/structure.sql")
-     *
-     * @return void
      */
     public static function setUpBeforeClass(): void
     {
@@ -61,8 +59,6 @@ abstract class TestCaseConfigAndDatabase extends TestCase
 
     /**
      * This method is called after the last test of this test class is run.
-     *
-     * @return void
      */
     public static function tearDownAfterClass(): void
     {
@@ -80,11 +76,8 @@ abstract class TestCaseConfigAndDatabase extends TestCase
 
     /**
      * Executes command.
-     *
-     * @param string $command
-     * @return void
      */
-    protected static function executeCommand(string $command)
+    protected static function executeCommand(string $command): void
     {
         ob_start();
         passthru($command, $result);
