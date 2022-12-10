@@ -25,12 +25,7 @@ class PDOExcavated extends PDO
 {
     use ExcavatingTrait;
 
-    /**
-     * @todo PHP >=7.1: Add visibility and remove ignorance.
-     * phpcs:disable
-     */
-    const ATTR_DEBUG = "debug";
-    // phpcs:enable
+    public const ATTR_DEBUG = "debug";
 
     /**
      * Represents a connection between PHP and a database server.
