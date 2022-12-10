@@ -2,6 +2,9 @@
 [![GitHub license](https://img.shields.io/github/license/deepeloper/pdo-debugging.svg)](https://github.com/deepeloper/pdo-debugging/blob/master/LICENSE)
 
 ## Compatibility
+[![PHP >=7.2.5 < 7.3](https://img.shields.io/badge/PHP-%3E%3D7.2.5%20%3C7.3-%237A86B8)]() &oline;&oline;
+[![2.1.0](https://img.shields.io/badge/Release-2.1.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/2.1.0)
+
 [![PHP ^7.0](https://img.shields.io/badge/PHP-%5E7.0-%237A86B8)]() &oline;&oline;
 [![2.0.0](https://img.shields.io/badge/Release-2.0.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/2.0.0)
 
@@ -15,12 +18,12 @@
 [![1.0.0](https://img.shields.io/badge/Release-1.0.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/1.0.0)
 
 ## Installation
-`composer require deepeloper/pdo-debugging "^2.0"`   
+`composer require deepeloper/pdo-debugging "^2.1"`   
 
 or add to "composer.json" section
 ```json
 "require": {
-    "deepeloper/pdo-debugging": "^2.0"
+    "deepeloper/pdo-debugging": "^2.1"
 }
 ```
 
