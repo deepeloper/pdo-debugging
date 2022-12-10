@@ -98,7 +98,7 @@ abstract class TestCaseConfigAndDatabase extends TestCase
      *
      * @param array $debuggingOptions
      * @param string $pdoClassName
-     * @return PDO
+     * @return PDOExcavated
      */
     protected function connectDatabase(
         array $debuggingOptions = null,
