@@ -261,7 +261,7 @@ class CommonTest extends TestCaseConfigAndDatabase
     public function testExceptionOnWrongQuery()
     {
         $pdo = $this->connectDatabase();
-        $this->setExpectedException(PDOException::class);
+        $this->expectException(PDOException::class);
         $stmt = $pdo->query("SOME KIND OF SHIT");
     }
 
@@ -274,7 +274,8 @@ class CommonTest extends TestCaseConfigAndDatabase
     public function testExceptionOnInvalidCommit()
     {
         $pdo = $this->connectDatabase();
-        $this->setExpectedException(PDOException::class, "There is no active transaction");
+        $this->expectException(PDOException::class);
+        $this->expectExceptionMessage("There is no active transaction");
         $pdo->commit();
     }
 }
