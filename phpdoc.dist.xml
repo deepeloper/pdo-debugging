@@ -15,14 +15,14 @@
                 <path>src</path>
             </source>
             <ignore hidden="true" symlinks="true">
-                <path>tests/**/*</path>
-                <path>build/**/*</path>
-                <path>vendor/**/*</path>
+                <path>tests/*</path>
+                <path>build/*</path>
+                <path>vendor/*</path>
             </ignore>
             <extensions>
                 <extension>php</extension>
             </extensions>
         </api>
     </version>
-    <template name="clean" />
+    <template name="default" />
 </phpdocumentor>
