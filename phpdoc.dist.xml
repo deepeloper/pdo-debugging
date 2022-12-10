@@ -12,10 +12,6 @@
         <target>build/output/api</target>
     </transformer>
 
-    <plugins>
-        <plugin path="Core" />
-    </plugins>
-
     <transformations>
         <template name="clean" />
     </transformations>

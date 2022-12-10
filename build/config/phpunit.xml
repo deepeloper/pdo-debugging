@@ -13,8 +13,8 @@
     <testsuites>
         <testsuite name="Tests">
             <directory>../../tests</directory>
-            <ignore>../../tests/config</ignore>
-            <ignore>../../tests/src</ignore>
+            <exclude>../../tests/config</exclude>
+            <exclude>../../tests/src</exclude>
         </testsuite>
     </testsuites>
 
