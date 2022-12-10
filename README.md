@@ -21,12 +21,12 @@
 [![1.0.0](https://img.shields.io/badge/Release-1.0.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/1.0.0)
 
 ## Installation
-`composer require deepeloper/pdo-debugging "^2.1"`   
+`composer require deepeloper/pdo-debugging "^2.2"`   
 
 or add to "composer.json" section
 ```json
 "require": {
-    "deepeloper/pdo-debugging": "^2.1"
+    "deepeloper/pdo-debugging": "^2.2"
 }
 ```
 
