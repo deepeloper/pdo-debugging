@@ -1,6 +1,7 @@
 .idea
 .stuff
 
+build/config/.phpunit.result.cache
 build/logs/*
 build/output/*
 build/tmp/*
