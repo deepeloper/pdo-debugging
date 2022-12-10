@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<phpdocumentor>
-
+<phpdocumentor
+    configVersion="3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://www.phpdoc.org"
+>
     <title>PDO Debugging &amp; Benchmarking Tools</title>
-
-    <parser>
-        <default-package-name>pdo-debugging</default-package-name>
-        <target>build/tmp/api-cache</target>
-    </parser>
-
-    <transformer>
-        <target>build/output/api</target>
-    </transformer>
-
-    <transformations>
-        <template name="clean" />
-    </transformations>
-
-    <files>
-        <directory>./src</directory>
-    </files>
-
+    <paths>
+        <output>build/output/api</output>
+        <cache>build/tmp/api-cache</cache>
+    </paths>
+    <version number="3.0.0">
+        <api>
+            <source dsn=".">
+                <path>src</path>
+            </source>
+            <ignore hidden="true" symlinks="true">
+                <path>tests/**/*</path>
+                <path>build/**/*</path>
+                <path>vendor/**/*</path>
+            </ignore>
+            <extensions>
+                <extension>php</extension>
+            </extensions>
+        </api>
+    </version>
+    <template name="clean" />
 </phpdocumentor>
