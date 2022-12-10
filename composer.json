@@ -15,14 +15,14 @@
     "prefer-stable": true,
     "config": {
         "platform": {
-            "php": "7.4"
+            "php": "8.0"
         },
         "allow-plugins": {
             "symfony/flex": true
         }
     },
     "require": {
-        "php": "^7.4",
+        "php": "8.0.*",
         "ext-pdo": "*",
         "ext-json": "*"
     },

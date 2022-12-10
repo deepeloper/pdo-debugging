@@ -92,17 +92,6 @@ class PDOStatementExcavated extends PDOStatement
     }
 
     /**
-     * Gets result set iterator.
-     *
-     * @see https://www.php.net/manual/en/pdostatement.getiterator.php
-     * @codeCoverageIgnore
-     */
-    public function getIterator(): Iterator
-    {
-        return $this->stmt->getIterator();
-    }
-
-    /**
      * Returns query string.
      */
     public function getQueryString(): string
@@ -219,10 +208,9 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Executes a prepared statement.
      *
-     * @param ?array $params
      * @see https://www.php.net/manual/en/pdostatement.execute.php
      */
-    public function execute($params = null): bool
+    public function execute(?array $params = null): bool
     {
         if (is_array($params)) {
             foreach ($params as $param => $value) {
@@ -250,13 +238,9 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches the next row from a result set.
      *
-     * @param ?int $mode
-     * @param ?int $cursorOrientation
-     * @param ?int $cursorOffset
-     * @return mixed
      * @see https://www.php.net/manual/en/pdostatement.fetch.php
      */
-    public function fetch($mode = null, $cursorOrientation = PDO::FETCH_ORI_NEXT, $cursorOffset = 0)
+    public function fetch($mode = null, $cursorOrientation = PDO::FETCH_ORI_NEXT, $cursorOffset = 0): mixed
     {
         $result = null;
         $e = null;
@@ -274,12 +258,9 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches the remaining rows from a result set.
      *
-     * @param ?int $mode
-     * @param ?mixed $fetch_argument
-     * @param ?array $args Constructor arguments
      * @see https://www.php.net/manual/en/pdostatement.fetchall.php
      */
-    public function fetchAll($mode = null, $fetch_argument = null, $args = null): array
+    public function fetchAll(?int $mode = PDO::FETCH_DEFAULT, mixed ...$args): array
     {
         $result = null;
         $e = null;
@@ -287,12 +268,10 @@ class PDOStatementExcavated extends PDOStatement
         try {
             if (null === $mode) {
                 $result = $this->stmt->fetchAll();
-            } elseif (null === $fetch_argument) {
+            } elseif ([] === $args) {
                 $result = $this->stmt->fetchAll($mode);
-            } elseif (null === $args) {
-                $result = $this->stmt->fetchAll($mode, $fetch_argument);
             } else {
-                $result = $this->stmt->fetchAll($mode, $fetch_argument, $args);
+                $result = $this->stmt->fetchAll($mode, ...$args);
             }
             // @codeCoverageIgnoreStart
         } catch (PDOException $e) {
@@ -305,11 +284,9 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Returns a single column from the next row of a result set.
      *
-     * @param ?int $column Column number
-     * @return mixed
      * @see https://www.php.net/manual/en/pdostatement.fetchcolumn.php
      */
-    public function fetchColumn($column = 0)
+    public function fetchColumn(?int $column = 0): mixed
     {
         $result = null;
         $e = null;
@@ -327,11 +304,9 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches the next row and returns it as an object.
      *
-     * @param ?string $class Class name
-     * @param ?array $constructorArgs
      * @see https://www.php.net/manual/en/pdostatement.fetchobject.php
      */
-    public function fetchObject($class = null, $constructorArgs = null): object
+    public function fetchObject(?string $class = null, ?array $constructorArgs = null): object
     {
         $result = null;
         $e = null;
@@ -352,12 +327,10 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Retrieves a statement attribute.
      *
-     * @param int $name
-     * @return mixed
      * @see https://www.php.net/manual/en/pdostatement.getattribute.php
      * @codeCoverageIgnore
      */
-    public function getAttribute($name)
+    public function getAttribute(int $name): mixed
     {
         return $this->stmt->getAttribute($name);
     }
@@ -365,14 +338,23 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Returns metadata for a column in a result set.
      *
-     * @param int $column
-     * @return array
      * @see https://www.php.net/manual/en/pdostatement.getcolumnmeta.php
      * @codeCoverageIgnore
      */
-    public function getColumnMeta($column): array
+    public function getColumnMeta(int $column): array
     {
         return $this->stmt->getColumnMeta($column);
+    }
+
+    /**
+     * Gets result set iterator.
+     *
+     * @see https://www.php.net/manual/en/pdostatement.getiterator.php
+     * @codeCoverageIgnore
+     */
+    public function getIterator(): Iterator
+    {
+        return $this->stmt->getIterator();
     }
 
     /**
@@ -400,13 +382,10 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Sets a statement attribute.
      *
-     * @param int $attribute
-     * @param mixed $value
-     * @return bool
      * @see https://www.php.net/manual/en/pdostatement.setattribute.php
      * @codeCoverageIgnore
      */
-    public function setAttribute($attribute, $value): bool
+    public function setAttribute(int $attribute, mixed $value): bool
     {
         return $this->stmt->setAttribute($attribute, $value);
     }
@@ -414,20 +393,15 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Sets the default fetch mode for this statement.
      *
-     * @param int $mode
-     * @param ?null|string|object $className
-     * @param ?array $params
      * @see https://www.php.net/manual/en/pdostatement.setfetchmode.php
      * @codeCoverageIgnore
      */
-    public function setFetchMode($mode, $className = null, array $params = []): bool
+    public function setFetchMode(int $mode, mixed ...$args): bool
     {
-        if (null === $className) {
+        if ([] === $args) {
             return $this->stmt->setFetchMode($mode);
-        } elseif ([] === $params) {
-            return $this->stmt->setFetchMode($mode, $className);
         } else {
-            return $this->stmt->setFetchMode($mode, $className, $params);
+            return $this->stmt->setFetchMode($mode, $args);
         }
     }
 
@@ -450,7 +424,7 @@ class PDOStatementExcavated extends PDOStatement
     }
 
     /**
-     * Replaces placeholders, sets {@link self::$lastExecutedQuery} and prepares to log message.
+     * Replaces placeholders, sets {@see PDOStatementExcavated::$lastExecutedQuery} and prepares to log message.
      *
      * @see self::execute()
      */
@@ -463,17 +437,11 @@ class PDOStatementExcavated extends PDOStatement
             $search = sprintf("/%s/", preg_quote($marker, "/"));
             foreach ($this->values as $field => $data) {
                 $dataType = $data[1] & ~PDO::PARAM_INPUT_OUTPUT;
-                switch ($dataType) {
-                    case PDO::PARAM_BOOL:
-                        $value = is_int($data[0]) ? (int)(bool)$data[0] : $data[0];
-                        break;
-                    case PDO::PARAM_INT:
-                        $value = (int)$data[0];
-                        break;
-                    default:
-                        $value = $this->pdo->quote($data[0], $data[1]);
-                        break;
-                }
+                $value = match ($dataType) {
+                    PDO::PARAM_BOOL => is_int($data[0]) ? (int)(bool)$data[0] : $data[0],
+                    PDO::PARAM_INT => (int)$data[0],
+                    default => $this->pdo->quote($data[0], $data[1]),
+                };
                 $query = is_string($field)
                     ? str_replace(
                         ":$field",
@@ -494,15 +462,12 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Updates benchmarks, returns result or throws an exception.
      *
-     * @param float $delay
-     * @param mixed $result
-     * @param ?PDOException|null $e
      * @see self::fetch()
      * @see self::fetchAll()
      * @see self::fetchColumn()
      * @see self::fetchObject()
      */
-    protected function getFetchResult(float $delay, $result, PDOException $e = null)
+    protected function getFetchResult(float $delay, mixed $result, PDOException $e = null): mixed
     {
         $this->benchmarks->container['fetch']['count']++;
         $this->statementBenchmarks['fetch']['count']++;

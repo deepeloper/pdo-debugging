@@ -141,7 +141,7 @@ class CommonTest extends TestCaseConfigAndDatabase
         self::assertEquals([100500], $stmt->fetchAll(PDO::FETCH_COLUMN, 0));
         $stmt->closeCursor();
         $stmt->execute();
-        self::assertEquals([(object)$record], $stmt->fetchAll(PDO::FETCH_CLASS, "stdClass", []));
+        self::assertEquals([(object)$record], $stmt->fetchAll(PDO::FETCH_CLASS, "stdClass"));
 
         $stmt = Tools::prepareModifyingStatement(
             $pdo,

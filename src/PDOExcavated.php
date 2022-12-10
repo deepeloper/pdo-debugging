@@ -101,10 +101,9 @@ class PDOExcavated extends PDO
     /**
      * Executes an SQL statement and returns the number of affected rows.
      *
-     * @param string $statement
      * @see https://www.php.net/manual/en/pdo.exec.php
      */
-    public function exec($statement): int
+    public function exec(string $statement): int
     {
         $this->before([
             'source' => __METHOD__,
@@ -154,9 +153,8 @@ class PDOExcavated extends PDO
     public function query(
         string $statement,
         ?int $mode = PDO::ATTR_DEFAULT_FETCH_MODE,
-        $arg3 = null,
-        ?array $ctorargs = []
-    ): PDOStatement {
+        mixed ...$fetchModeArgs
+    ): PDOStatement|false {
         $this->before([
             'source' => sprintf("%s::query", __CLASS__),
             'query' => $statement,
@@ -170,13 +168,13 @@ class PDOExcavated extends PDO
                     $stmt = parent::query($statement);
                     break;
                 case PDO::FETCH_CLASS:
-                    $stmt = parent::query($statement, $mode, $arg3, $ctorargs);
+                    $stmt = parent::query($statement, $mode, ...$fetchModeArgs);
                     break;
                 default:
-                    if (null === $arg3) {
+                    if ([] === $fetchModeArgs) {
                         $stmt = parent::query($statement, $mode);
                     } else {
-                        $stmt = parent::query($statement, $mode, $arg3);
+                        $stmt = parent::query($statement, $mode, ...$fetchModeArgs);
                     }
             }
             // @codeCoverageIgnoreStart
