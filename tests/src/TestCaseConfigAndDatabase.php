@@ -49,7 +49,7 @@ abstract class TestCaseConfigAndDatabase extends TestCase
      *
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -66,7 +66,7 @@ abstract class TestCaseConfigAndDatabase extends TestCase
      *
      * @return void
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (isset(self::$config['db']['commands']['drop'])) {
             $command = sprintf(
