@@ -33,46 +33,35 @@ class PDOStatementExcavated extends PDOStatement
 
     /**
      * SQL query template
-     *
-     * @var string
      */
-    protected $template;
+    protected string $template;
 
     /**
      * PDOExcavated object
-     *
-     * @var PDOExcavated
      */
-    protected $pdo;
+    protected PDOExcavated $pdo;
 
     /**
      * "Parent" statement object
-     *
-     * @var PDOStatement
      */
-    protected $stmt;
+    protected PDOStatement $stmt;
 
     /**
      * Binded values
-     *
-     * @var array
      */
-    protected $values = [];
+    protected array $values = [];
 
     /**
      * Last executed parsed query
-     *
-     * @var string
      */
-    protected $lastExecutedQuery;
+    protected ?string $lastExecutedQuery;
 
     /**
      * Statement benchmarks
      *
-     * @var int[][]
-     * @link self::getBenchmarks()
+     * @see PDOStatementExcavated::getBenchmarks()
      */
-    protected $statementBenchmarks = [
+    protected array $statementBenchmarks = [
         'query' => [
             'count' => 0,
             'time' => 0,
@@ -416,19 +405,25 @@ class PDOStatementExcavated extends PDOStatement
      * Sets the default fetch mode for this statement.
      *
      * @param int $mode
-     * @param mixed $params
+     * @param ?null|string|object $className
+     * @param ?array $params
      * @see https://www.php.net/manual/en/pdostatement.setfetchmode.php
      * @codeCoverageIgnore
      */
-    public function setFetchMode($mode, $params = null): bool
+    public function setFetchMode($mode, $className = null, array $params = []): bool
     {
-        return $this->stmt->setFetchMode($mode);
+        if (null === $className) {
+            return $this->stmt->setFetchMode($mode);
+        } elseif ([] === $params) {
+            return $this->stmt->setFetchMode($mode, $className);
+        } else {
+            return $this->stmt->setFetchMode($mode, $className, $params);
+        }
     }
 
     /**
      * Allows to customize log message scope.
      *
-     * @param array &$scope
      * @see ExcavatingTrait::after()
      */
     protected function scope(array &$scope): void
@@ -438,7 +433,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Prepares query for logging.
      *
-     * @param string $query
      * @see ExcavatingTrait::after()
      */
     protected function prepareQueryForLogging(string &$query): void
@@ -491,7 +485,7 @@ class PDOStatementExcavated extends PDOStatement
      * Updates benchmarks, returns result or throws an exception.
      *
      * @param float $delay
-     * @param $result
+     * @param mixed $result
      * @param ?PDOException|null $e
      * @see self::fetch()
      * @see self::fetchAll()

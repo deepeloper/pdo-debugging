@@ -29,18 +29,16 @@ abstract class TestCaseConfigAndDatabase extends TestCase
     /**
      * Config
      *
-     * @var array
      * @see self::setUpBeforeClass()
      */
-    protected static $config;
+    protected static array $config;
 
     /**
      * Log
      *
-     * @var array
      * @see Logger::log()
      */
-    protected static $log = [];
+    protected static array $log = [];
 
     /**
      * This method is called before the first test of this test class is run.
@@ -103,10 +101,6 @@ abstract class TestCaseConfigAndDatabase extends TestCase
 
     /**
      * Connects to database.
-     *
-     * @param ?array|null $debuggingOptions
-     * @param ?string $pdoClassName
-     * @return PDOExcavated
      */
     protected static function connectDatabase(
         array $debuggingOptions = null,

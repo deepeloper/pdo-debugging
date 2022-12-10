@@ -25,10 +25,8 @@ class CommonTest extends TestCaseConfigAndDatabase
 {
     /**
      * Initial benchmarks
-     *
-     * @var int[][]
      */
-    protected $benchmarks = [
+    protected array $benchmarks = [
         'query' => [
             'count' => 0,
             'time' => 0,

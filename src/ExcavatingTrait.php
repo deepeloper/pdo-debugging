@@ -33,17 +33,13 @@ trait ExcavatingTrait
 {
     /**
      * Flag specifies to skip logging
-     *
-     * @var bool
      */
-    protected $skipLogging = true;
+    protected bool $skipLogging = true;
 
     /**
      * Default debugging options
-     *
-     * @var array
      */
-    protected $debuggingOptions = [
+    protected array $debuggingOptions = [
         'logger' => null,
         'format' => [
             'timeStamp' => "Y-m-d H:i:s.u",
@@ -60,10 +56,8 @@ trait ExcavatingTrait
 
     /**
      * BenchmarkContainer object
-     *
-     * @var BenchmarksContainer
      */
-    protected $benchmarks;
+    protected BenchmarksContainer $benchmarks;
 
     /**
      * Array containing useful info for logging.
@@ -72,7 +66,7 @@ trait ExcavatingTrait
      * @link self::before()
      * @link self::after()
      */
-    protected $stack = [];
+    protected array $stack = [];
 
     /**
      * Allows to customize log message scope.

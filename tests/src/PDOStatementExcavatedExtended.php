@@ -17,8 +17,6 @@ class PDOStatementExcavatedExtended extends PDOStatementExcavated
     /**
      * Allows to customize log message scope.
      *
-     * @param array &$scope
-     * @return void
      * @see ExcavatingTrait::after()
      */
     protected function scope(array &$scope): void
@@ -29,8 +27,6 @@ class PDOStatementExcavatedExtended extends PDOStatementExcavated
     /**
      * Prepares query for logging.
      *
-     * @param string &$query
-     * @return void
      * @link ExcavatingTrait::after()
      */
     protected function prepareQueryForLogging(string &$query): void

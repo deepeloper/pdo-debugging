@@ -19,8 +19,6 @@ class PDOExcavatedExtended extends PDOExcavated
     /**
      * Prepares query for logging.
      *
-     * @param string &$query
-     * @return void
      * @see ExcavatingTrait::after()
      */
     protected function prepareQueryForLogging(string &$query): void
@@ -30,8 +28,6 @@ class PDOExcavatedExtended extends PDOExcavated
     /**
      * Allows to customize log message scope.
      *
-     * @param array &$scope
-     * @return void
      * @see ExcavatingTrait::after()
      */
     protected function scope(array &$scope): void
@@ -42,9 +38,6 @@ class PDOExcavatedExtended extends PDOExcavated
     /**
      * Method used to replace PDOStatementExcavated by possible child.
      *
-     * @param string $template
-     * @param PDOStatement $stmt
-     * @return PDOStatementExcavatedExtended
      * @see self::getResultStatement()
      */
     protected function getStatement(string $template, PDOStatement $stmt): PDOStatementExcavated

@@ -17,7 +17,7 @@ interface LoggerInterface
     /**
      * Logs message.
      *
-     * @link ExcavatingTrait::after()
+     * @see ExcavatingTrait::after()
      */
     public function log(string $message, array $scope): void;
 }

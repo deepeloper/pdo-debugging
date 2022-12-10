@@ -18,10 +18,8 @@ class BenchmarksContainer
 {
     /**
      * Benchmarks.
-     *
-     * @var array
      */
-    public $container = [
+    public array $container = [
         'query' => [
             'count' => 0,
             'time' => 0,

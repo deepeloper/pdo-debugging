@@ -16,10 +16,8 @@ class Logger implements LoggerInterface
 {
     /**
      * Array containing log messages
-     *
-     * @var array
      */
-    protected $log;
+    protected array $log;
 
     /**
      * Constructor.
