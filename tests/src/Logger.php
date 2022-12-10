@@ -17,14 +17,12 @@ class Logger implements LoggerInterface
     /**
      * Array containing log messages
      *
-     * @var &array
+     * @var array
      */
     protected $log;
 
     /**
      * Constructor.
-     *
-     * @param array &$log
      */
     public function __construct(array &$log)
     {
@@ -33,14 +31,9 @@ class Logger implements LoggerInterface
 
     /**
      * Logs message.
-     *
-     * @param string $message
-     * @param array $scope
-     * @return void
      */
-    public function log(string $message, array $scope)
+    public function log(string $message, array $scope): void
     {
-        // echo "$message\n";
         $this->log[] = $message;
     }
 }

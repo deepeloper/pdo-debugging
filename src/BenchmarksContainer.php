@@ -12,7 +12,7 @@ namespace deepeloper\PDO;
 /**
  * Benchmarks container class.
  *
- * Used to store common benchmarks for {@link PDOExcavated} and {@link PDOStatementExcavated}.
+ * Used to store common benchmarks for {@see PDOExcavated} and {@see PDOStatementExcavated}.
  */
 class BenchmarksContainer
 {

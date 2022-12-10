@@ -30,10 +30,6 @@ class PDOExcavated extends PDO
     /**
      * Represents a connection between PHP and a database server.
      *
-     * @param string $dsn
-     * @param string $username
-     * @param string $password
-     * @param array $options
      * @see https://www.php.net/manual/en/class.pdo.php
      */
     public function __construct(string $dsn, string $username = null, string $password = null, array $options = [])
@@ -61,7 +57,6 @@ class PDOExcavated extends PDO
     /**
      * Initiates a transaction.
      *
-     * @return bool
      * @see https://www.php.net/manual/en/pdo.begintransaction.php
      */
     public function beginTransaction(): bool
@@ -83,7 +78,6 @@ class PDOExcavated extends PDO
     /**
      * Commits a transaction.
      *
-     * @return bool
      * @see https://www.php.net/manual/en/pdo.commit.php
      */
     public function commit(): bool
@@ -108,7 +102,6 @@ class PDOExcavated extends PDO
      * Executes an SQL statement and returns the number of affected rows.
      *
      * @param string $statement
-     * @return int
      * @see https://www.php.net/manual/en/pdo.exec.php
      */
     public function exec($statement): int
@@ -135,9 +128,6 @@ class PDOExcavated extends PDO
     /**
      * Prepares a statement for execution and returns a statement object.
      *
-     * @param string $query
-     * @param array $options
-     * @return PDOStatement
      * @see https://www.php.net/manual/en/pdo.prepare.php
      */
     public function prepare($query, $options = null): PDOStatement
@@ -159,18 +149,13 @@ class PDOExcavated extends PDO
     /**
      * Prepares and executes an SQL statement without placeholders.
      *
-     * @param string $statement
-     * @param int $mode
-     * @param mixed $arg3
-     * @param array $constructorArgs
-     * @return PDOStatement
      * @see https://www.php.net/manual/en/pdo.query.php
      */
     public function query(
         string $statement,
-        int $mode = PDO::ATTR_DEFAULT_FETCH_MODE,
+        ?int $mode = PDO::ATTR_DEFAULT_FETCH_MODE,
         $arg3 = null,
-        array $constructorArgs = []
+        ?array $ctorargs = []
     ): PDOStatement {
         $this->before([
             'source' => sprintf("%s::query", __CLASS__),
@@ -185,7 +170,7 @@ class PDOExcavated extends PDO
                     $stmt = parent::query($statement);
                     break;
                 case PDO::FETCH_CLASS:
-                    $stmt = parent::query($statement, $mode, $arg3, $constructorArgs);
+                    $stmt = parent::query($statement, $mode, $arg3, $ctorargs);
                     break;
                 default:
                     if (null === $arg3) {
@@ -205,7 +190,6 @@ class PDOExcavated extends PDO
     /**
      * Rolls back a transaction.
      *
-     * @return bool
      * @see https://www.php.net/manual/en/pdo.rollback.php
      */
     public function rollBack(): bool
@@ -230,34 +214,24 @@ class PDOExcavated extends PDO
     /**
      * Prepares query for logging.
      *
-     * @param string $query
-     * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function prepareQueryForLogging(string &$query)
+    protected function prepareQueryForLogging(string &$query): void
     {
     }
 
     /**
      * Allows to customize log message scope.
      *
-     * @param array &$scope
-     * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function scope(array &$scope)
+    protected function scope(array &$scope): void
     {
     }
 
     /**
      * Updates total time, returns statement object or throws an exception.
      *
-     * @param float $delay
-     * @param string $key
-     * @param string $template
-     * @param PDOStatement $stmt
-     * @param PDOException|null $e
-     * @return PDOStatement
      * @see self::prepare()
      * @see self::query()
      */
@@ -265,8 +239,8 @@ class PDOExcavated extends PDO
         float $delay,
         string $key,
         string $template,
-        PDOStatement $stmt = null,
-        PDOException $e = null
+        ?PDOStatement $stmt = null,
+        ?PDOException $e = null
     ): PDOStatement {
         $this->benchmarks->container[$key]['count']++;
         $this->benchmarks->container[$key]['time'] += $delay;
@@ -282,9 +256,6 @@ class PDOExcavated extends PDO
     /**
      * Method used to replace PDOStatementExcavated by possible child.
      *
-     * @param string $template
-     * @param PDOStatement $stmt
-     * @return PDOStatementExcavated
      * @see self::getResultStatement()
      */
     protected function getStatement(string $template, PDOStatement $stmt): PDOStatementExcavated

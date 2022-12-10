@@ -90,8 +90,6 @@ class PDOStatementExcavated extends PDOStatement
      * Constructor.
      *
      * @param string $template SQL query template i. e. "UPDATE `table` %s WHERE `id` = :id"
-     * @param PDOExcavated $pdo
-     * @param PDOStatement $stmt
      */
     public function __construct(string $template, PDOExcavated $pdo, PDOStatement $stmt)
     {
@@ -107,8 +105,6 @@ class PDOStatementExcavated extends PDOStatement
 
     /**
      * Returns query string.
-     *
-     * @return string
      */
     public function getQueryString(): string
     {
@@ -117,8 +113,6 @@ class PDOStatementExcavated extends PDOStatement
 
     /**
      * Returns statement benchmarks.
-     *
-     * @return array
      */
     public function getBenchmarks(): array
     {
@@ -127,8 +121,6 @@ class PDOStatementExcavated extends PDOStatement
 
     /**
      * Returns last executed parsed query.
-     *
-     * @return string
      */
     public function getLastExecutedQuery(): string
     {
@@ -138,12 +130,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Binds a column to a PHP variable.
      *
-     * @param $column
-     * @param $var
-     * @param int $type
-     * @param int $maxLength
-     * @param $driverOptions
-     * @return bool
      * @see https://www.php.net/manual/en/pdostatement.bindcolumn.php
      * @codeCoverageIgnore
      */
@@ -155,12 +141,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Binds a parameter to the specified variable name.
      *
-     * @param string|int $param
-     * @param mixed &$var
-     * @param int $type
-     * @param int $maxLength
-     * @param mixed $driverOptions
-     * @return bool
      * @see https://www.php.net/manual/en/pdostatement.bindparam.php
      * @codeCoverageIgnore
      */
@@ -173,10 +153,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Binds a value to a parameter.
      *
-     * @param int|string $param
-     * @param mixed $value
-     * @param int $type
-     * @return bool
      * @see https://www.php.net/manual/en/pdostatement.bindvalue.php
      * @codeCoverageIgnore
      */
@@ -189,7 +165,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Closes the cursor, enabling the statement to be executed again.
      *
-     * @return bool
      * @see https://www.php.net/manual/en/pdostatement.closecursor.php
      * @codeCoverageIgnore
      */
@@ -201,7 +176,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Returns the number of columns in the result set.
      *
-     * @return int
      * @see https://www.php.net/manual/en/pdostatement.columncount.php
      * @codeCoverageIgnore
      */
@@ -213,7 +187,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Dump an SQL prepared command.
      *
-     * @return void
      * @see https://www.php.net/manual/en/pdostatement.debugdumpparams.php
      * @codeCoverageIgnore
      */
@@ -225,7 +198,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches the SQLSTATE associated with the last operation on the statement handle.
      *
-     * @return string
      * @see https://www.php.net/manual/en/pdostatement.errorcode.php
      * @codeCoverageIgnore
      */
@@ -237,7 +209,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches extended error information associated with the last operation on the statement handle.
      *
-     * @return array
      * @see https://www.php.net/manual/en/pdostatement.errorinfo.php
      * @codeCoverageIgnore
      */
@@ -249,8 +220,7 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Executes a prepared statement.
      *
-     * @param array $params
-     * @return bool
+     * @param ?array $params
      * @see https://www.php.net/manual/en/pdostatement.execute.php
      */
     public function execute($params = null): bool
@@ -281,9 +251,9 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches the next row from a result set.
      *
-     * @param int $mode
-     * @param int $cursorOrientation
-     * @param int $cursorOffset
+     * @param ?int $mode
+     * @param ?int $cursorOrientation
+     * @param ?int $cursorOffset
      * @return mixed
      * @see https://www.php.net/manual/en/pdostatement.fetch.php
      */
@@ -305,10 +275,9 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches the remaining rows from a result set.
      *
-     * @param int $mode
-     * @param mixed $fetch_argument
-     * @param array $args Constructor arguments
-     * @return array
+     * @param ?int $mode
+     * @param ?mixed $fetch_argument
+     * @param ?array $args Constructor arguments
      * @see https://www.php.net/manual/en/pdostatement.fetchall.php
      */
     public function fetchAll($mode = null, $fetch_argument = null, $args = null): array
@@ -337,7 +306,7 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Returns a single column from the next row of a result set.
      *
-     * @param int $column Column number
+     * @param ?int $column Column number
      * @return mixed
      * @see https://www.php.net/manual/en/pdostatement.fetchcolumn.php
      */
@@ -359,12 +328,11 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Fetches the next row and returns it as an object.
      *
-     * @param string $class
-     * @param array $constructorArgs
-     * @return object
+     * @param ?string $class Class name
+     * @param ?array $constructorArgs
      * @see https://www.php.net/manual/en/pdostatement.fetchobject.php
      */
-    public function fetchObject($class = null, $constructorArgs = null)
+    public function fetchObject($class = null, $constructorArgs = null): object
     {
         $result = null;
         $e = null;
@@ -411,7 +379,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Advances to the next rowset in a multi-rowset statement handle.
      *
-     * @return bool
      * @see https://www.php.net/manual/en/pdostatement.nextrowset.php
      * @codeCoverageIgnore
      */
@@ -423,7 +390,6 @@ class PDOStatementExcavated extends PDOStatement
     /**
      * Returns the number of rows affected by the last SQL statement.
      *
-     * @return int
      * @see https://www.php.net/manual/en/pdostatement.rowcount.php
      * @codeCoverageIgnore
      */
@@ -451,7 +417,6 @@ class PDOStatementExcavated extends PDOStatement
      *
      * @param int $mode
      * @param mixed $params
-     * @return bool
      * @see https://www.php.net/manual/en/pdostatement.setfetchmode.php
      * @codeCoverageIgnore
      */
@@ -464,10 +429,9 @@ class PDOStatementExcavated extends PDOStatement
      * Allows to customize log message scope.
      *
      * @param array &$scope
-     * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function scope(array &$scope)
+    protected function scope(array &$scope): void
     {
     }
 
@@ -475,17 +439,15 @@ class PDOStatementExcavated extends PDOStatement
      * Prepares query for logging.
      *
      * @param string $query
-     * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function prepareQueryForLogging(string &$query)
+    protected function prepareQueryForLogging(string &$query): void
     {
     }
 
     /**
      * Replaces placeholders, sets {@link self::$lastExecutedQuery} and prepares to log message.
      *
-     * @return void
      * @see self::execute()
      */
     protected function render()
@@ -530,8 +492,7 @@ class PDOStatementExcavated extends PDOStatement
      *
      * @param float $delay
      * @param $result
-     * @param PDOException|null $e
-     * @return mixed
+     * @param ?PDOException|null $e
      * @see self::fetch()
      * @see self::fetchAll()
      * @see self::fetchColumn()

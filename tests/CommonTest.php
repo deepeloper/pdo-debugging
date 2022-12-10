@@ -57,7 +57,7 @@ class CommonTest extends TestCaseConfigAndDatabase
      * @return void
      * @cover PDOExcavated::testGetAvailableDrivers
      */
-    public function testGetAvailableDrivers()
+    public function testGetAvailableDrivers(): void
     {
         self::assertEquals(PDO::getAvailableDrivers(), PDOExcavated::getAvailableDrivers());
     }
@@ -71,7 +71,7 @@ class CommonTest extends TestCaseConfigAndDatabase
      * @cover PDOStatementExcavated
      * @cover Tools
      */
-    public function testClasses()
+    public function testClasses(): void
     {
         $pdo = self::connectDatabase();
         $benchmarks = $pdo->getBenchmarks();
@@ -220,7 +220,7 @@ class CommonTest extends TestCaseConfigAndDatabase
      * @cover ExcavatingTrait::after
      * @cover PDOExcavated::prepareQueryForLogging
      */
-    public function testWithLoggerAndNonemptySources()
+    public function testWithLoggerAndNonemptySources(): void
     {
         self::$log = [];
 
@@ -263,7 +263,7 @@ class CommonTest extends TestCaseConfigAndDatabase
      * @return void
      * @cover PDOExcavated::getResultStatement
      */
-    public function testExceptionOnWrongQuery()
+    public function testExceptionOnWrongQuery(): void
     {
         $pdo = self::connectDatabase();
         $this->expectException(PDOException::class);
@@ -276,7 +276,7 @@ class CommonTest extends TestCaseConfigAndDatabase
      * @return void
      * @cover ExcavatingTrait::getResult
      */
-    public function testExceptionOnInvalidCommit()
+    public function testExceptionOnInvalidCommit(): void
     {
         $pdo = self::connectDatabase();
         $this->expectException(PDOException::class);

@@ -77,29 +77,21 @@ trait ExcavatingTrait
     /**
      * Allows to customize log message scope.
      *
-     * @param array &$scope
-     * @return void
      * @link self::after()
      */
-    abstract protected function scope(array &$scope);
+    abstract protected function scope(array &$scope): void;
 
     /**
      * Prepares query for logging.
      *
-     * @param string $query
-     * @return void
      * @link self::after()
      */
-    abstract protected function prepareQueryForLogging(string &$query);
+    abstract protected function prepareQueryForLogging(string &$query): void;
 
     /**
      * Initializes debugging.
-     *
-     * @param array $options
-     * @param BenchmarksContainer|null $benchmarkContainer
-     * @return void
      */
-    public function initDebugging(array $options = [], BenchmarksContainer $benchmarkContainer = null)
+    public function initDebugging(?array $options = [], ?BenchmarksContainer $benchmarkContainer = null): void
     {
         $this->debuggingOptions = array_replace_recursive($this->debuggingOptions, $options);
         $this->benchmarks = null !== $benchmarkContainer ? $benchmarkContainer : new BenchmarksContainer();
@@ -108,7 +100,6 @@ trait ExcavatingTrait
     /**
      * Returns array containing debugging options as first element and benchmark container as second.
      *
-     * @return array
      * @see PDOStatementExcavated::__construct()
      */
     public function getDebuggingEnvironment(): array
@@ -118,8 +109,6 @@ trait ExcavatingTrait
 
     /**
      * Returns array containing benchmarks.
-     *
-     * @return array
      */
     public function getBenchmarks(): array
     {
@@ -128,12 +117,8 @@ trait ExcavatingTrait
 
     /**
      * Pushes useful data to internal stack before PDO/PDOStatement method execution.
-     *
-     * @param array $args
-     * @param array $excludeArgIndexes
-     * @return void
      */
-    protected function before(array $args = null, array $excludeArgIndexes = null)
+    protected function before(?array $args = null, ?array $excludeArgIndexes = null): void
     {
         if ($this->skipLogging) {
             return;
@@ -168,10 +153,8 @@ trait ExcavatingTrait
     /**
      * Pops useful data from internal stack after PDO/PDOStatement method execution and logs info about which method
      * called or about query.
-     *
-     * @return void
      */
-    protected function after()
+    protected function after(): void
     {
         if ($this->skipLogging) {
             return;
@@ -223,12 +206,9 @@ trait ExcavatingTrait
     /**
      * Updates total time, returns result or throws an exception.
      *
-     * @param float $delay
-     * @param $result
-     * @param PDOException|null $e
      * @return mixed
      */
-    protected function getResult(float $delay, $result, PDOException $e = null)
+    protected function getResult(float $delay, $result, ?PDOException $e = null)
     {
         $this->benchmarks->container['total']['time'] += $delay;
         if (isset($this->statementBenchmarks)) {
@@ -244,10 +224,6 @@ trait ExcavatingTrait
 
     /**
      * Renders log message.
-     *
-     * @param string $template
-     * @param array $scope
-     * @return string
      */
     protected function renderLogMessage(string $template, array $scope): string
     {

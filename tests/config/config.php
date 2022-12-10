@@ -11,6 +11,9 @@ namespace deepeloper\PDO;
 
 use PDO;
 
+use function error_reporting;
+use function ini_set;
+
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 

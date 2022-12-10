@@ -23,7 +23,7 @@ class PDOExcavatedExtended extends PDOExcavated
      * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function prepareQueryForLogging(string &$query)
+    protected function prepareQueryForLogging(string &$query): void
     {
     }
 
@@ -34,7 +34,7 @@ class PDOExcavatedExtended extends PDOExcavated
      * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function scope(array &$scope)
+    protected function scope(array &$scope): void
     {
         $scope['FOO'] = __METHOD__;
     }

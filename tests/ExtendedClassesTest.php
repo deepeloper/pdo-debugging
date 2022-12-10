@@ -16,7 +16,7 @@ use PDO;
  */
 class ExtendedClassesTest extends TestCaseConfigAndDatabase
 {
-    public function testExtension()
+    public function testExtension(): void
     {
         self::$log = [];
 

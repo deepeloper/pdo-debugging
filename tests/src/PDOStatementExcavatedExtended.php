@@ -21,7 +21,7 @@ class PDOStatementExcavatedExtended extends PDOStatementExcavated
      * @return void
      * @see ExcavatingTrait::after()
      */
-    protected function scope(array &$scope)
+    protected function scope(array &$scope): void
     {
         $scope['FOO'] = __METHOD__;
     }
@@ -33,7 +33,7 @@ class PDOStatementExcavatedExtended extends PDOStatementExcavated
      * @return void
      * @link ExcavatingTrait::after()
      */
-    protected function prepareQueryForLogging(string &$query)
+    protected function prepareQueryForLogging(string &$query): void
     {
     }
 }

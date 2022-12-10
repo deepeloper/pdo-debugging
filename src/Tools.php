@@ -53,20 +53,13 @@ class Tools
      * ```sql
      * UPDATE `table` SET `field` = :field, `time_updated` = NOW() WHERE `id` = :id
      * ```
-     *
-     * @param PDO $pdo PDO instance
-     * @param string $template SQL query template i. e. "sql UPDATE `table` %s WHERE `id` = :id"
-     * @param array $record Record
-     * @param array $types Values data types
-     * @param array $rawValues Raw values
-     * @return PDOStatement
      */
     public static function prepareModifyingStatement(
         PDO $pdo,
         string $template,
         array $record,
-        array $types = [],
-        array $rawValues = []
+        ?array $types = [],
+        ?array $rawValues = []
     ): PDOStatement {
         $fields = array_map(
             function ($field) {
