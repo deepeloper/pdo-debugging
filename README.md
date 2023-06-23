@@ -1,5 +1,11 @@
 # PDO Debugging & Benchmarking Tools
+[![Packagist version](https://img.shields.io/packagist/v/deepeloper/pdo-debugging)](https://packagist.org/packages/deepeloper/pdo-debugging)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/deepeloper/pdo-debugging.svg)](http://php.net/)
 [![GitHub license](https://img.shields.io/github/license/deepeloper/pdo-debugging.svg)](https://github.com/deepeloper/pdo-debugging/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues-raw/deepeloper/pdo-debugging.svg)](https://github.com/deepeloper/pdo-debugging/issues)
+[![Packagist](https://img.shields.io/packagist/dt/deepeloper/pdo-debugging.svg)](https://packagist.org/packages/deepeloper/pdo-debugging)
+
+[![Donation](https://img.shields.io/badge/Donation-Visa,%20MasterCard,%20Maestro,%20UnionPay,%20YooMoney,%20МИР-red)](https://yoomoney.ru/to/41001351141494)
 
 ## Compatibility
 [![PHP 8.0.*](https://img.shields.io/badge/PHP-8.0.*-%237A86B8)]() &oline;&oline;
@@ -27,14 +33,7 @@
 [![1.0.0](https://img.shields.io/badge/Release-1.0.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/1.0.0)
 
 ## Installation
-`composer require deepeloper/pdo-debugging "^3.0"`   
-
-or add to "composer.json" section
-```json
-"require": {
-    "deepeloper/pdo-debugging": "^3.0"
-}
-```
+Run `composer require deepeloper/pdo-debugging`.   
 
 ## Benchmarking
 Allows to collect following benchmarks per PDO connection: 
