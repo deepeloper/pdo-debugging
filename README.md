@@ -4,20 +4,25 @@
 [![GitHub license](https://img.shields.io/github/license/deepeloper/pdo-debugging.svg)](https://github.com/deepeloper/pdo-debugging/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues-raw/deepeloper/pdo-debugging.svg)](https://github.com/deepeloper/pdo-debugging/issues)
 [![Packagist](https://img.shields.io/packagist/dt/deepeloper/pdo-debugging.svg)](https://packagist.org/packages/deepeloper/pdo-debugging)
+[![CI](https://github.com/deepeloper/pdo-debuggingn/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/deepeloper/lib-xml/actions)
+[![codecov](https://codecov.io/gh/deepeloper/lib-xml/branch/main/graph/badge.svg)](https://codecov.io/gh/deepeloper/lib-xml)
 
 [![Donation](https://img.shields.io/badge/Donation-Visa,%20MasterCard,%20Maestro,%20UnionPay,%20YooMoney,%20МИР-red)](https://yoomoney.ru/to/41001351141494)
 
 ## Compatibility
-[![PHP 8.0.*](https://img.shields.io/badge/PHP-8.0.*-%237A86B8)]() &oline;&oline;
+[![PHP >=8.2](https://img.shields.io/badge/PHP>=8.2-%237A86B8)]() &oline;&oline;
+[![3.0.1](https://img.shields.io/badge/Release-3.0.1-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/3.0.0)
+
+[![PHP >=8.0,<8.2](https://img.shields.io/badge/PHP%3E%3D8.0,%3C8.2-%237A86B8)]() &oline;&oline;
 [![3.0.0](https://img.shields.io/badge/Release-3.0.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/3.0.0)
 
 [![PHP ^7.4](https://img.shields.io/badge/PHP-%5E7.4-%237A86B8)]() &oline;&oline;
 [![2.3.0](https://img.shields.io/badge/Release-2.3.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/2.3.0)
 
-[![PHP >=7.3 < 7.4](https://img.shields.io/badge/PHP-%3E%3D7.3%20%3C7.4-%237A86B8)]() &oline;&oline;
+[![PHP >=7.3,<7.4](https://img.shields.io/badge/PHP-%3E%3D7.3,%3C7.4-%237A86B8)]() &oline;&oline;
 [![2.2.0](https://img.shields.io/badge/Release-2.2.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/2.2.0)
 
-[![PHP >=7.2.5 < 7.3](https://img.shields.io/badge/PHP-%3E%3D7.2.5%20%3C7.3-%237A86B8)]() &oline;&oline;
+[![PHP >=7.2.5,<7.3](https://img.shields.io/badge/PHP-%3E%3D7.2.5,%3C7.3-%237A86B8)]() &oline;&oline;
 [![2.1.0](https://img.shields.io/badge/Release-2.1.0-%233fb950)](https://github.com/deepeloper/pdo-debugging/releases/tag/2.1.0)
 
 [![PHP ^7.0](https://img.shields.io/badge/PHP-%5E7.0-%237A86B8)]() &oline;&oline;
