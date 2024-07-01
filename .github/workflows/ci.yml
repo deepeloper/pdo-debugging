@@ -6,7 +6,6 @@ jobs:
   build-test:
     permissions: write-all
     runs-on: ubuntu-latest
-
     services:
       mysql:
         env:
