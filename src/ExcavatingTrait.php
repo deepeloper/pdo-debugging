@@ -178,7 +178,9 @@ trait ExcavatingTrait
             foreach ($this->debuggingOptions['sources'] as $pattern) {
                 $log = substr($pattern, 0, 1) === "/"
                     ? preg_match($pattern, $call['source'])
+                    // @codeCoverageIgnoreStart
                     : $pattern === $call['source'];
+                    // @codeCoverageIgnoreEnd
                 if ($log) {
                     break;
                 }
