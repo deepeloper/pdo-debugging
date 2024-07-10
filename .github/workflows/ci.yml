@@ -45,7 +45,7 @@ jobs:
 #          DATABASE_ENDPOINT: "127.0.0.1" # Will not work with 'localhost', since that will try a Unix socket connection (!)
         with:
           php_version: "8.3"
-          php_extensions: "xdebug"
+          php_extensions: "xdebug, pdo, php_mysqli"
           bootstrap: "vendor/autoload.php"
           configuration: "build/config/phpunit.xml"
           test_suffix: "Test.php"
