@@ -27,7 +27,7 @@ jobs:
 
       - uses: php-actions/composer@v6
         with:
-          php_version: "8.3"
+          php_version: "8.2"
 
       - name: actions-setup-mysql
         uses: shogo82148/actions-setup-mysql@v1.35.0
@@ -44,8 +44,8 @@ jobs:
 #          DATABASE_PASSWORD: "rootpass"
 #          DATABASE_ENDPOINT: "127.0.0.1" # Will not work with 'localhost', since that will try a Unix socket connection (!)
         with:
-          php_version: "8.3"
-          php_extensions: "xdebug, pdo, pdo_mysql"
+          php_version: "8.2"
+          php_extensions: "xdebug, pdo, mysql, pdo_mysql"
           bootstrap: "vendor/autoload.php"
           configuration: "build/config/phpunit.xml"
           test_suffix: "Test.php"
