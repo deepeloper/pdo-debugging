@@ -132,7 +132,13 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.bindparam.php
      * @codeCoverageIgnore
      */
-    public function bindParam($param, &$var, $type = PDO::PARAM_STR, $maxLength = 0, $driverOptions = null): bool
+    public function bindParam(
+        #[LanguageLevelTypeAware(['8.0' => 'int|string'], default: '')] $param,
+        #[LanguageLevelTypeAware(['8.0' => 'mixed'], default: '')] &$var,
+        #[LanguageLevelTypeAware(['8.0' => 'int'], default: '')] $type = PDO::PARAM_STR,
+        #[LanguageLevelTypeAware(['8.0' => 'int'], default: '')] $maxLength = 0,
+        #[LanguageLevelTypeAware(['8.0' => 'mixed'], default: '')] $driverOptions = null
+    ): bool
     {
         $this->values[$param] = [&$var, $type];
         return $this->stmt->bindParam($param, $var, $type);
@@ -178,7 +184,7 @@ class PDOStatementExcavated extends PDOStatement
      * @see https://www.php.net/manual/en/pdostatement.debugdumpparams.php
      * @codeCoverageIgnore
      */
-    public function debugDumpParams()
+    public function debugDumpParams(): ?bool
     {
         $this->stmt->debugDumpParams();
     }
@@ -240,7 +246,11 @@ class PDOStatementExcavated extends PDOStatement
      *
      * @see https://www.php.net/manual/en/pdostatement.fetch.php
      */
-    public function fetch($mode = null, $cursorOrientation = PDO::FETCH_ORI_NEXT, $cursorOffset = 0): mixed
+    public function fetch(
+        #[LanguageLevelTypeAware(['8.0' => 'int'], default: '')] $mode = PDO::FETCH_DEFAULT,
+        #[LanguageLevelTypeAware(['8.0' => 'int'], default: '')] $cursorOrientation = PDO::FETCH_ORI_NEXT,
+        #[LanguageLevelTypeAware(['8.0' => 'int'], default: '')] $cursorOffset = 0
+    ): mixed
     {
         $result = null;
         $e = null;
@@ -266,7 +276,7 @@ class PDOStatementExcavated extends PDOStatement
         $e = null;
         $timeStamp = microtime(true);
         try {
-            if (null === $mode) {
+            if (PDO::FETCH_DEFAULT === $mode) {
                 $result = $this->stmt->fetchAll();
             } elseif ([] === $args) {
                 $result = $this->stmt->fetchAll($mode);

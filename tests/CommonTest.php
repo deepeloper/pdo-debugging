@@ -206,7 +206,7 @@ class CommonTest extends TestCaseConfigAndDatabase
         $stmt->execute();
         self::assertEquals("1", $stmt->fetchColumn());
         $stmt->closeCursor();
-        $stmt->bindValue(1, null, PDO::PARAM_NULL);
+        $stmt->bindValue(1, "", PDO::PARAM_NULL);
         $stmt->execute();
         self::assertNull($stmt->fetchColumn());
     }
