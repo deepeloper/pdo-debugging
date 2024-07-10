@@ -50,11 +50,13 @@ abstract class TestCaseConfigAndDatabase extends TestCase
         parent::setUpBeforeClass();
 
         static::$config = require("tests/config/config.php");
-        $command = sprintf(
-            static::$config['db']['commands']['create'],
-            static::$config['db']['username']
-        );
-        self::executeCommand($command);
+        if ("Windows_NT" === getenv("OS")) {
+            $command = sprintf(
+                static::$config['db']['commands']['create'],
+                static::$config['db']['username']
+            );
+            self::executeCommand($command);
+        }
     }
 
     /**
@@ -62,7 +64,7 @@ abstract class TestCaseConfigAndDatabase extends TestCase
      */
     public static function tearDownAfterClass(): void
     {
-        if (isset(self::$config['db']['commands']['drop'])) {
+        if (isset(self::$config['db']['commands']['drop']) && "Windows_NT" === getenv("OS")) {
             $command = sprintf(
                 self::$config['db']['commands']['drop'],
                 self::$config['db']['username'],
