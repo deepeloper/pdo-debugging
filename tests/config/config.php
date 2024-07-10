@@ -35,8 +35,8 @@ return [
         ],
         'name' => "pdo_debugging_tests",
         'commands' => [
-            'create' => "mysql -u %s < \"tests/config/structure.sql\"",
-            'drop' => "mysqladmin -u %s -f drop %s",
+            'create' => "mysql -u%s < \"tests/config/structure.sql\"",
+            'drop' => "mysqladmin -u%s -f drop %s",
         ],
     ],
 ];

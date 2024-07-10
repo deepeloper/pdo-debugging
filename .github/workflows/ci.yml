@@ -29,9 +29,10 @@ jobs:
         with:
           php_version: "8.3"
 
-      - uses: shogo82148/actions-setup-mysql@v1
+      - name: actions-setup-mysql
+        uses: shogo82148/actions-setup-mysql@v1.35.0
         with:
-          mysql-version: "8.0"
+          mysql-version: "mariadb-10.6"
       - run: mysql -uroot -e 'SELECT version()'
 
       - name: PHPUnit Tests
